@@ -82,8 +82,10 @@ const AdminPage = () => {
     fetchComments();
   }, []); // Empty dependency array to run only once on component mount
 
-  const deleteHandel = (id) => {
-    const userConfirm = window.confirm("Bạn có muốn xoá không !");
+  const deleteHandel = (id, name) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá người dùng ${name} không !`
+    );
 
     if (userConfirm) {
       axios
@@ -99,8 +101,10 @@ const AdminPage = () => {
     }
   };
 
-  const deleteHandelCategory = (id) => {
-    const userConfirm = window.confirm("Bạn có muốn xoá không !");
+  const deleteHandelCategory = (id, name) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá danh mục ${name} không !`
+    );
 
     if (userConfirm) {
       axios
@@ -116,8 +120,10 @@ const AdminPage = () => {
     }
   };
 
-  const handelDeletePost = (id) => {
-    const userConfirm = window.confirm("Bạn có muốn xoá không !");
+  const handelDeletePost = (id, name) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá bài viết ${name} không !`
+    );
 
     if (userConfirm) {
       axios
@@ -256,7 +262,7 @@ const AdminPage = () => {
                       </Button>
                       <Button variant="danger" className="mr-2">
                         <a
-                          onClick={() => deleteHandel(user.id)}
+                          onClick={() => deleteHandel(user.id, user.username)}
                           className="text-white text-decoration-none"
                         >
                           Xoá
@@ -314,7 +320,7 @@ const AdminPage = () => {
                       <Button
                         variant="danger"
                         className="mr-2"
-                        onClick={() => handelDeletePost(post.id)}
+                        onClick={() => handelDeletePost(post.id, post.name)}
                       >
                         Xoá
                       </Button>
@@ -362,7 +368,9 @@ const AdminPage = () => {
                       </Button>
                       <Button variant="danger" className="mr-2">
                         <a
-                          onClick={() => deleteHandelCategory(cate.id)}
+                          onClick={() =>
+                            deleteHandelCategory(cate.id, cate.name)
+                          }
                           className="text-white text-decoration-none"
                         >
                           Delete

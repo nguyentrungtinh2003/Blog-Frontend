@@ -22,8 +22,10 @@ const MyComment = () => {
 
   const context = useContext(ThemeContext);
 
-  const handleDeleteComment = (id) => {
-    const userConfirm = window.confirm("Bạn có muốn xoá không !");
+  const handleDeleteComment = (id, content) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá bình luận ${content} không !`
+    );
 
     if (userConfirm) {
       axios
@@ -93,7 +95,9 @@ const MyComment = () => {
                   </a>
                   <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteComment(comment.id)}
+                    onClick={() =>
+                      handleDeleteComment(comment.id, comment.content)
+                    }
                   >
                     Xoá
                   </button>

@@ -22,21 +22,26 @@ const MyPosts = () => {
 
   const context = useContext(ThemeContext);
 
-  const handleDeletePost = (postId) => {
-    axios
-      .delete(`http://localhost:8080/api/posts/${postId}`)
-      .then((response) => {
-        console.log("Delete post success");
-        // Xóa bài viết khỏi state sau khi xóa thành công
-        setMyPost((prevPosts) =>
-          prevPosts.filter((post) => post.id !== postId)
-        );
-      })
-      .catch((error) => {
-        console.error("Error deleting post", error);
-      });
+  const handleDeletePost = (postId, name) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá bài viết ${name} không !`
+    );
+    if (userConfirm) {
+      axios
+        .delete(`http://localhost:8080/api/posts/${postId}`)
+        .then((response) => {
+          console.log("Delete post success");
+          // Xóa bài viết khỏi state sau khi xóa thành công
+          setMyPost((prevPosts) =>
+            prevPosts.filter((post) => post.id !== postId)
+          );
+        })
+        .catch((error) => {
+          console.error("Error deleting post", error);
+        });
 
-    window.location.reload();
+      window.location.reload();
+    }
   };
 
   return (
@@ -74,7 +79,7 @@ const MyPosts = () => {
                   </a>
                   <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => handleDeletePost(post.id)}
+                    onClick={() => handleDeletePost(post.id, post.name)}
                   >
                     Xoá
                   </button>

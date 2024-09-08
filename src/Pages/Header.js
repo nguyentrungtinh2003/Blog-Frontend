@@ -6,7 +6,7 @@ import { ThemeContext } from "./ThemeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 const Header = () => {
-  const { user, userId, setUser } = useContext(UserContext);
+  const { user, userId, userImg, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,21 +27,26 @@ const Header = () => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/">
-            Trang chủ
+            <i className="fas fa-home"></i>
           </Nav.Link>
         </Nav>
-        <button onClick={context.toggleTheme} className="btn btn-primary">
+        <button onClick={context.toggleTheme} className="btn btn-primary m-2">
           {context.theme === "light" ? <FaSun /> : <FaMoon />}
         </button>
         <Nav>
           {user ? (
             <>
               <div className="d-flex justify-content-center align-items-center">
+                <img
+                  src={`http://localhost:8080/uploads/${userImg}`}
+                  alt="User Avatar"
+                  style={{ width: "40px", height: "40px", borderRadius: "50%" }} // Điều chỉnh kích thước và bo tròn hình ảnh
+                />
                 <Nav.Link
                   href="/user"
-                  className="text-white text-decoration-none"
+                  className="text-white text-decoration-none ms-2" // Thêm khoảng cách giữa ảnh và tên người dùng
                 >
-                  {`User: ${user}, user_id: ${userId}`}
+                  <span>{`${user} ID: ${userId}`}</span>
                 </Nav.Link>
               </div>
 
@@ -49,6 +54,7 @@ const Header = () => {
             </>
           ) : (
             <Nav.Link as={Link} to="/login">
+              <i className="fa fa-user me-2"></i>
               Đăng nhập
             </Nav.Link>
           )}

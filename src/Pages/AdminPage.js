@@ -153,7 +153,10 @@ const AdminPage = () => {
             onClick={fetchUsers}
           >
             <Card.Body>
-              <Card.Title>Người dùng</Card.Title>
+              <Card.Title>
+                {" "}
+                <i className="fas fa-user"></i>
+              </Card.Title>
               <Card.Text>Tổng: {userCount}</Card.Text>
               <Button variant="primary">Quản lí người dùng</Button>
             </Card.Body>
@@ -166,7 +169,10 @@ const AdminPage = () => {
             onClick={fetchPosts}
           >
             <Card.Body>
-              <Card.Title>Bài viết</Card.Title>
+              <Card.Title>
+                {" "}
+                <i className="fas fa-book"></i>
+              </Card.Title>
               <Card.Text>Tổng: {postCount}</Card.Text>
               <Button variant="primary">Quản lí bài viết</Button>
             </Card.Body>
@@ -180,14 +186,17 @@ const AdminPage = () => {
             }`}
           >
             <Card.Body>
-              <Card.Title>Danh mục</Card.Title>
+              <Card.Title>
+                {" "}
+                <i className="fas fa-th"></i>
+              </Card.Title>
               <Card.Text>Tổng: {categoryCount}</Card.Text>
-              <Button variant="primary" className="mr-2">
+              <Button variant="primary" className="m-2">
                 <a
                   href={`/addCategory`}
                   className="text-white text-decoration-none"
                 >
-                  Thêm
+                  <i className="fas fa-add"></i>
                 </a>
               </Button>
               <Button variant="primary" onClick={fetchCategory}>
@@ -202,7 +211,10 @@ const AdminPage = () => {
             className={`mb-4 ${selectedCard === "comments" ? "selected" : ""}`}
           >
             <Card.Body>
-              <Card.Title>Bình luận</Card.Title>
+              <Card.Title>
+                {" "}
+                <i className="fas fa-comment"></i>
+              </Card.Title>
               <Card.Text>Tổng: {commentCount}</Card.Text>
               <Button variant="primary" onClick={fetchComments}>
                 Quản lí bình luận
@@ -249,15 +261,15 @@ const AdminPage = () => {
                           href={`/viewUser/${user.id}`}
                           className="text-white text-decoration-none"
                         >
-                          Xem
+                          <i className="fas fa-eye"></i>
                         </a>
                       </Button>
-                      <Button variant="primary" className="mr-2">
+                      <Button variant="primary" className="m-2">
                         <a
                           href={`/editUser/${user.id}`}
                           className="text-white text-decoration-none"
                         >
-                          Sửa
+                          <i className="fas fa-edit"></i>
                         </a>
                       </Button>
                       <Button variant="danger" className="mr-2">
@@ -265,7 +277,7 @@ const AdminPage = () => {
                           onClick={() => deleteHandel(user.id, user.username)}
                           className="text-white text-decoration-none"
                         >
-                          Xoá
+                          <i className="fas fa-remove"></i>
                         </a>
                       </Button>
                     </td>
@@ -309,12 +321,12 @@ const AdminPage = () => {
                       )}
                     </td>
                     <td>
-                      <Button variant="primary" className="mr-2">
+                      <Button variant="primary" className="m-2">
                         <a
                           href={`/editPost/${post.id}`}
                           className="text-white "
                         >
-                          Sửa
+                          <i className="fas fa-edit"></i>
                         </a>
                       </Button>
                       <Button
@@ -322,7 +334,7 @@ const AdminPage = () => {
                         className="mr-2"
                         onClick={() => handelDeletePost(post.id, post.name)}
                       >
-                        Xoá
+                        <i className="fas fa-remove"></i>
                       </Button>
                     </td>
                   </tr>
@@ -358,12 +370,12 @@ const AdminPage = () => {
                       ))}
                     </td>
                     <td>
-                      <Button variant="warning" className="mr-2">
+                      <Button variant="primary" className="m-2">
                         <a
                           href={`/editCategory/${cate.id}`}
                           className="text-white text-decoration-none"
                         >
-                          Edit
+                          <i className="fas fa-edit"></i>
                         </a>
                       </Button>
                       <Button variant="danger" className="mr-2">
@@ -373,7 +385,7 @@ const AdminPage = () => {
                           }
                           className="text-white text-decoration-none"
                         >
-                          Delete
+                          <i className="fas fa-remove"></i>
                         </a>
                       </Button>
                     </td>

@@ -22,6 +22,7 @@ import UserEditComment from "./Pages/UserEditComment";
 import ViewUser from "./Pages/ViewUser";
 import AdminAddCategory from "./Pages/AdminAddCategory";
 import AdminEditCategory from "./Pages/AdminEditCategory";
+import UserEditProfile from "./Pages/UserEditProfile";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/editPost/:id" element={<AdminEditPost />} />
           <Route path="/userEditPost/:id" element={<UserEditPost />} />
           <Route path="/userEditComment/:id" element={<UserEditComment />} />
+          <Route path="/userEditProfile/:id" element={<UserEditProfile />} />
           <Route path="/myPosts/:id" element={<MyPosts />} />
           <Route path="/myComments/:id" element={<MyComment />} />
           <Route path="/addCategory" element={<AdminAddCategory />} />

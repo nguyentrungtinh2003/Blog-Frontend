@@ -10,8 +10,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
-  const { setUser, setUserId } = useContext(UserContext);
+  const { setUser, setUserId, setUserImg } = useContext(UserContext);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,20 +21,28 @@ const Login = () => {
         "http://localhost:8080/api/auth/login",
         { username, password }
       );
-      const { username: loggedInUser, user_id: loggedInUserId } = response.data;
+      const { username: loggedInUser, id: loggedInUserId, img } = response.data;
       setMessage(`User: ${loggedInUser} logged in successfully!`);
       setError(false);
       setUser(loggedInUser);
       setUserId(loggedInUserId);
+      setUserImg(img);
       if (username === "admin") {
         navigate("/admin");
-      } else {
+      }
+      if (username) {
         navigate("/user");
+      } else {
+        navigate("/login");
       }
     } catch (error) {
       setMessage("Invalid credentials");
       setError(true);
     }
+  };
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const context = useContext(ThemeContext);
@@ -61,17 +70,22 @@ const Login = () => {
               <Form.Group controlId="formPassword" className="mt-3">
                 <Form.Label>Mật khẩu</Form.Label>
                 <Form.Control
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
+              <Button onClick={togglePassword} className="m-3 ">
+                <i
+                  className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </Button>
 
-              <Button variant="primary" type="submit" className="mt-3">
+              <Button variant="primary" type="submit" className="mt-2">
                 Đăng nhập
               </Button>
-              <div className="mt-3">
+              <div className="mt-2">
                 <Link to="/register">
                   <Button variant="secondary">Đăng ký</Button>
                 </Link>

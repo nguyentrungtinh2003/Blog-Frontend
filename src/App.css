@@ -2,3 +2,90 @@
   color: white;
   background-color: black;
 }
+
+.left-sidebar {
+  background-color: #f8f9fa; /* Màu nền cho sidebar */
+  height: 100vh; /* Chiều cao full màn hình */
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  overflow-y: auto; /* Cho phép cuộn nội dung nếu quá dài */
+}
+
+.right-content {
+  margin-left: 16.66667%; /* Dịch chuyển col-10 để không tràn qua col-2 */
+  padding: 20px;
+}
+
+.fixed-top-bar {
+  background-color: white; /* Màu nền cho thanh cố định */
+  color: white;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.scrollable-content {
+  margin-top: 60px; /* Đảm bảo nội dung không bị che bởi thanh cố định */
+  max-height: calc(100vh - 60px); /* Chiều cao tối đa để cho phép cuộn */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+/* edit profile 
+/* styles.css */
+.profile-form-container {
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.profile-form-label {
+  font-weight: bold;
+}
+
+.profile-form-group {
+  margin-bottom: 1rem;
+}
+
+.profile-form-img {
+  width: 100px;
+  border-radius: 8px;
+}
+/* view profile
+/* styles.css */
+.user-profile-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile-header {
+  background-color: #007bff;
+  color: white;
+  border-bottom: 1px solid #0056b3;
+}
+
+.user-profile-img {
+  border: 4px solid #007bff;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+}
+
+/* toogle password*/
+/* css theme.dark cho input search */
+/* Tùy chỉnh lớp cho dark mode */
+.input-dark {
+  background-color: white; /* Nền tối */
+  color: dark; /* Chữ màu trắng */
+}
+
+/* Tùy chỉnh lớp cho light mode */
+.input-light {
+  background-color: #f8f9fa; /* Nền sáng */
+  color: black; /* Chữ màu đen */
+}

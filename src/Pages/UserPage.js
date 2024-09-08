@@ -347,337 +347,337 @@ const UserPage = () => {
 
   return (
     <div className={`${context.theme}`}>
-      <div className="row">
+      <div className={`${context.theme} row`}>
         <div className="col-2">
-          <div className="bg-light border-right" style={{ minHeight: "100vh" }}>
-            <ul class="list-group">
+          <div
+            className=" fixed-top-bar"
+            style={{ minHeight: "100vh", padding: "15px" }}
+          >
+            <ul className="list-group">
               {findCategory.map((cate) => (
                 <li
-                  class={`list-group-item ${
-                    activeCategory == cate.id ? "active" : ""
+                  key={cate.id}
+                  className={`list-group-item list-group-item-action ${
+                    activeCategory === cate.id ? "active" : ""
                   }`}
-                  aria-current="true"
                   onClick={() => onCategorySelect(cate.id)}
+                  style={{
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                    marginBottom: "10px",
+                    transition: "background-color 0.3s ease",
+                  }}
                 >
                   {cate.name}
                 </li>
               ))}
+              <li
+                className="list-group-item list-group-item-action"
+                onClick={() => window.location.reload()}
+              >
+                Tất cả
+              </li>
             </ul>
           </div>
         </div>
-        <div className="col-10">
-          <Container>
-            <Row className="justify-content-center">
-              <Col xs="auto">
+
+        <div className={`col-10`}>
+          <div className={`${context.theme} fixed-top-bar`}>
+            <Row className={`${context.theme} justify-content-center`}>
+              <Col xs="auto" className={context.theme}>
                 <Button
-                  className="mb-2"
-                  variant="primary"
+                  className={`${context.theme} `}
+                  variant={context.theme === "dark" ? "dark" : "primary"}
                   onClick={() => setShowModal(true)}
                 >
-                  Thêm bài đăng
+                  <i className="fas fa-add"></i>
                 </Button>
               </Col>
-              <Col xs="auto">
-                <Button
-                  className="mb-2"
-                  variant="secondary"
-                  onClick={() => {
-                    fetchUserDetails();
-                    setShowProfileModal(true);
-                  }}
-                >
-                  Chỉnh sửa hồ sơ
-                </Button>
+              <Col xs="auto" className={context.theme}>
+                <a href={`/userEditProfile/${userId}`}>
+                  <Button
+                    className={context.theme}
+                    variant={context.theme === "dark" ? "dark" : "primary"}
+                  >
+                    <i className="fas fa-user"></i>
+                  </Button>
+                </a>
               </Col>
-              <Col xs="auto">
+              <Col xs="auto" className={context.theme}>
                 <a href={`/myPosts/${userId}`}>
-                  <Button className="mb-2" variant="info">
-                    Bài viết của tôi
+                  <Button
+                    className={`${context.theme} mb-2`}
+                    variant={context.theme === "dark" ? "dark" : "primary"}
+                  >
+                    <i className="fas fa-book"></i>
                   </Button>
                 </a>
               </Col>
-              <Col xs="auto">
+              <Col xs="auto" className={context.theme}>
                 <a href={`/myComments/${userId}`}>
-                  <Button className="mb-2" variant="info">
-                    Bình luận của tôi
+                  <Button
+                    className={`${context.theme} mb-2`}
+                    variant={context.theme === "dark" ? "dark" : "primary"}
+                  >
+                    <i className="fas fa-comment"></i>
                   </Button>
                 </a>
               </Col>
-              <Col xs="auto">
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Thông báo{" "}
-                    <Badge variant="light">{notification.length}</Badge>
+              <Col xs="auto" className={context.theme}>
+                <Dropdown className={context.theme}>
+                  <Dropdown.Toggle
+                    variant={context.theme === "dark" ? "dark" : "primary"}
+                    id="dropdown-basic"
+                  >
+                    <i className="fas fa-bell"></i>{" "}
+                    <Badge bg="danger">{notification.length}</Badge>
                   </Dropdown.Toggle>
-                  <Dropdown.Menu>
+                  <Dropdown.Menu
+                    className={
+                      context.theme === "dark" ? "bg-dark text-white" : ""
+                    }
+                  >
                     {notification.length > 0 ? (
                       notification.map((noti, index) => (
                         <Dropdown.Item
                           key={index}
                           onClick={() => markAsRead(noti.id)}
-                          style={{ fontWeight: noti.read ? "normal" : "bold" }}
+                          style={{
+                            fontWeight: noti.read ? "normal" : "bold",
+                          }}
+                          className={
+                            context.theme === "dark" ? "text-white" : ""
+                          }
                         >
                           {noti.message}
                         </Dropdown.Item>
                       ))
                     ) : (
-                      <Dropdown.Item>Không có thông báo nào.</Dropdown.Item>
+                      <Dropdown.Item
+                        className={context.theme === "dark" ? "text-white" : ""}
+                      >
+                        Không có thông báo nào.
+                      </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
               {user === "admin" && (
-                <Col xs="auto">
+                <Col xs="auto" className={context.theme}>
                   <a href={`/admin`}>
-                    <Button className="mb-2" variant="info">
-                      Bảng điều khiển
+                    <Button
+                      className={`${context.theme} mb-2`}
+                      variant={context.theme === "dark" ? "dark" : "primary"}
+                    >
+                      <i className="fas fa-tachometer-alt"></i>
                     </Button>
                   </a>
                 </Col>
               )}
             </Row>
 
-            {/* <Row className="mt-4">
-          <Carousel className="mt-4">
-            {Array.from({ length: Math.ceil(posts.length / 4) }).map(
-              (_, index) => (
-                <Carousel.Item key={index}>
-                  <Row>
-                    {posts.slice(index * 4, index * 4 + 4).map((post) => (
-                      <Col key={post.id} md={3} className="mb-4 d-flex">
-                        <Card className="shadow-sm border-0 flex-fill">
-                          {post.img && (
-                            <Card.Img
-                              variant="top"
-                              src={`http://localhost:8080/uploads/${post.img}`}
-                              alt="Post image"
-                              className="img-fluid"
-                            />
-                          )}
-                          <Card.Body>
-                            <Card.Title>{post.name}</Card.Title>
-                            {/* <Card.Text>{post.content}</Card.Text> */}
-            {/* <Button variant="primary">Xem chi tiết</Button> */}
-            {/* </Card.Body>
-                          <Card.Footer className="bg-white">
-                            <small className="text-muted">
-                              Được đăng bởi{" "}
-                              <strong>{post.postedBy.username}</strong> vào{" "}
-                              <strong>{getTimeElapsed(post.date)}</strong>
-                            </small>
-                          </Card.Footer>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </Carousel.Item>
-              )
-            )}
-          </Carousel>
-        </Row> */}
-
-            <Row className="justify-content-center mb-4">
-              <Col md={8} className="text-center">
+            <Row className={`${context.theme} justify-content-center `}>
+              <Col md={8} className={`text-center ${context.theme}`}>
                 <Form.Group className="shadow-lg">
                   <Form.Control
                     type="text"
-                    placeholder="Tìm kiếm bài đăng..."
+                    placeholder="Tìm kiếm bài viết ..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    className={`${
+                      context.theme === "dark" ? "input-dark" : "input-light"
+                    }`} // Sử dụng lớp custom
                   />
                 </Form.Group>
                 <Button
-                  className="mt-2"
-                  variant="primary"
+                  className={`${context.theme} mt-2`}
+                  variant={context.theme === "dark" ? "dark" : "primary"}
                   onClick={handleSearch}
                 >
-                  <FaSearch /> Tìm kiếm
+                  <FaSearch />
                 </Button>
-                {posts && posts.length === 0 ? (
-                  <Alert variant="danger">
-                    Không tìm thấy bài viết nào có tên{" "}
-                    <strong>{searchTerm}</strong>
-                  </Alert>
-                ) : (
-                  <Alert variant="success">
-                    Có <strong>{posts.length}</strong> bài viết !
-                  </Alert>
-                )}
               </Col>
             </Row>
-            <Row className="justify-content-center">
-              {(posts.length > 0 ? posts : posts).map((pos) => (
-                <Col key={pos.id} md={8} className="mb-4">
-                  <Card className="shadow-lg">
-                    <Card.Header className="d-flex align-items-center bg-white">
-                      <Image
-                        src={`http://localhost:8080/uploads/${pos.postedBy.img}`}
-                        roundedCircle
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          marginRight: "10px",
+          </div>
+
+          <div className={`${context.theme} scrollable-content`}>
+            <Container>
+              <Row className={`${context.theme} justify-content-center`}>
+                {(posts.length > 0 ? posts : posts).map((pos) => (
+                  <Col key={pos.id} md={8} className={`${context.theme} mb-4`}>
+                    <Card className="shadow-lg w-100">
+                      <Card.Header className="d-flex align-items-center bg-white">
+                        <Image
+                          src={`http://localhost:8080/uploads/${pos.postedBy.img}`}
+                          roundedCircle
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            marginRight: "10px",
+                          }}
+                        />
+                        <div>
+                          <Card.Title className="mb-0">{pos.name}</Card.Title>
+                          <Card.Subtitle className="text-muted mt-2">
+                            Được đăng bởi{" "}
+                            <strong>{pos.postedBy.username}</strong> vào{" "}
+                            <strong>{getTimeElapsed(pos.date)}</strong>
+                          </Card.Subtitle>
+                        </div>
+                      </Card.Header>
+                      <Card.Body>
+                        {/* <Card.Text>{post.content}</Card.Text> */}
+                        {pos.img && (
+                          <Card.Img
+                            variant="top"
+                            src={`http://localhost:8080/uploads/${pos.img}`}
+                          />
+                        )}
+
+                        <a className="btn btn-link" href={`/view/${pos.id}`}>
+                          <button className="btn btn-primary mt-2">
+                            <li className="fas fa-eye"></li>
+                          </button>
+                        </a>
+                      </Card.Body>
+                      <Card.Footer className="bg-white">
+                        <div className="d-flex justify-content-around">
+                          <Button
+                            variant="link"
+                            className="text-primary text-decoration-none custom-like-button"
+                            onClick={() =>
+                              likedPosts.includes(pos.id)
+                                ? handleUnlike(pos.id)
+                                : handleLike(pos.id)
+                            }
+                          >
+                            <FaThumbsUp
+                              style={{
+                                color: likedPosts.includes(pos.id)
+                                  ? "blue"
+                                  : "gray",
+                              }}
+                            />{" "}
+                            {pos.likeCount} Thích
+                          </Button>
+                          <Button
+                            variant="link"
+                            className="text-primary text-decoration-none custom-like-button"
+                            onClick={() => handleShowModal(pos.id)}
+                          >
+                            <FaComment /> Bình luận
+                          </Button>
+                          <Button
+                            variant="link"
+                            className="text-primary text-decoration-none custom-like-button"
+                          >
+                            <FaEye /> {pos.viewCount - 1} Lượt xem
+                          </Button>
+                        </div>
+                      </Card.Footer>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+
+              {/* Modal for adding a new post */}
+              <Modal show={showModal} onHide={handleCloseModal} size="lg">
+                <Modal.Header closeButton>
+                  <Modal.Title>Thêm bài đăng mới</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form onSubmit={handleAddPost}>
+                    <Form.Group controlId="formPostName">
+                      <Form.Label>Tên bài đăng</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nhập tên bài đăng"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formPostContent">
+                      <Form.Label>Nội dung</Form.Label>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={content}
+                        onChange={(e, editor) => {
+                          const data = editor.getData();
+                          setContent(data);
                         }}
                       />
-                      <div>
-                        <Card.Title className="mb-0">{pos.name}</Card.Title>
-                        <Card.Subtitle className="text-muted mt-2">
-                          Được đăng bởi <strong>{pos.postedBy.username}</strong>{" "}
-                          vào <strong>{getTimeElapsed(pos.date)}</strong>
-                        </Card.Subtitle>
-                      </div>
-                    </Card.Header>
-                    <Card.Body>
-                      {/* <Card.Text>{post.content}</Card.Text> */}
-                      {pos.img && (
-                        <Card.Img
-                          variant="top"
-                          src={`http://localhost:8080/uploads/${pos.img}`}
-                        />
-                      )}
+                    </Form.Group>
+                    <Form.Group controlId="formPostImg">
+                      <Form.Label>Link ảnh (tùy chọn)</Form.Label>
+                      <Form.Control
+                        type="file"
+                        placeholder="Nhập link ảnh"
+                        // value={img}
+                        onChange={(e) => setImg(e.target.files[0])}
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formPostTags">
+                      <Form.Label>Thẻ (phân cách bởi dấu phẩy)</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nhập các tags"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formPostCategory">
+                      <Form.Label>Danh mục</Form.Label>
+                      <Form.Control
+                        as="select" // Thay đổi từ type="text" thành as="select"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)} // Giá trị sẽ là ID của danh mục
+                        required
+                      >
+                        <option value="">Chọn một danh mục</option>
+                        {categories.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.name} {/* Hiển thị tên danh mục */}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                    <Button variant="primary" type="submit" className="mt-2">
+                      Đăng
+                    </Button>
+                  </Form>
+                </Modal.Body>
+              </Modal>
 
-                      <a className="btn btn-link" href={`/view/${pos.id}`}>
-                        <button className="btn btn-primary mt-2">Xem</button>
-                      </a>
-                    </Card.Body>
-                    <Card.Footer className="bg-white">
-                      <div className="d-flex justify-content-around">
-                        <Button
-                          variant="link"
-                          className="text-primary text-decoration-none custom-like-button"
-                          onClick={() =>
-                            likedPosts.includes(pos.id)
-                              ? handleUnlike(pos.id)
-                              : handleLike(pos.id)
-                          }
-                        >
-                          <FaThumbsUp
-                            style={{
-                              color: likedPosts.includes(pos.id)
-                                ? "blue"
-                                : "gray",
-                            }}
-                          />{" "}
-                          {pos.likeCount} Thích
-                        </Button>
-                        <Button
-                          variant="link"
-                          className="text-primary text-decoration-none custom-like-button"
-                          onClick={() => handleShowModal(pos.id)}
-                        >
-                          <FaComment /> Bình luận
-                        </Button>
-                        <Button
-                          variant="link"
-                          className="text-primary text-decoration-none custom-like-button"
-                        >
-                          <FaEye /> {pos.viewCount - 1} Lượt xem
-                        </Button>
-                      </div>
-                    </Card.Footer>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+              {/* Modal for commenting on a post
+      <Modal
+        show={showModal && modalPostId !== null}
+        onHide={handleCloseModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Bình luận</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={(e) => handleCommentSubmit(e, modalPostId)}>
+            <Form.Group controlId="formComment">
+              <Form.Label>Nội dung bình luận</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Nhập nội dung bình luận"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Gửi bình luận
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal> */}
 
-            {/* Modal for adding a new post */}
-            <Modal show={showModal} onHide={handleCloseModal} size="lg">
-              <Modal.Header closeButton>
-                <Modal.Title>Thêm bài đăng mới</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Form onSubmit={handleAddPost}>
-                  <Form.Group controlId="formPostName">
-                    <Form.Label>Tên bài đăng</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Nhập tên bài đăng"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formPostContent">
-                    <Form.Label>Nội dung</Form.Label>
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={content}
-                      onChange={(e, editor) => {
-                        const data = editor.getData();
-                        setContent(data);
-                      }}
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formPostImg">
-                    <Form.Label>Link ảnh (tùy chọn)</Form.Label>
-                    <Form.Control
-                      type="file"
-                      placeholder="Nhập link ảnh"
-                      // value={img}
-                      onChange={(e) => setImg(e.target.files[0])}
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formPostTags">
-                    <Form.Label>Thẻ (phân cách bởi dấu phẩy)</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Nhập các tags"
-                      value={tags}
-                      onChange={(e) => setTags(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formPostCategory">
-                    <Form.Label>Danh mục</Form.Label>
-                    <Form.Control
-                      as="select" // Thay đổi từ type="text" thành as="select"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)} // Giá trị sẽ là ID của danh mục
-                      required
-                    >
-                      <option value="">Chọn một danh mục</option>
-                      {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                          {cat.name} {/* Hiển thị tên danh mục */}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
-                  <Button variant="primary" type="submit" className="mt-2">
-                    Đăng
-                  </Button>
-                </Form>
-              </Modal.Body>
-            </Modal>
-
-            {/* Modal for commenting on a post
-        <Modal
-          show={showModal && modalPostId !== null}
-          onHide={handleCloseModal}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Bình luận</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={(e) => handleCommentSubmit(e, modalPostId)}>
-              <Form.Group controlId="formComment">
-                <Form.Label>Nội dung bình luận</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Nhập nội dung bình luận"
-                  value={commentContent}
-                  onChange={(e) => setCommentContent(e.target.value)}
-                  required
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Gửi bình luận
-              </Button>
-            </Form>
-          </Modal.Body>
-        </Modal> */}
-
-            {/* Modal for profile update */}
+              {/* Modal for profile update
             <Modal
               show={showProfileModal}
               onHide={() => setShowProfileModal(false)}
@@ -748,8 +748,9 @@ const UserPage = () => {
                   </Button>
                 </Form>
               </Modal.Body>
-            </Modal>
-          </Container>
+            </Modal> */}
+            </Container>
+          </div>
         </div>
       </div>
     </div>

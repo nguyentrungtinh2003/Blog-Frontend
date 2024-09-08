@@ -7,6 +7,9 @@ import { ThemeContext } from "./ThemeContext";
 const AdminEditPost = () => {
   const { id } = useParams(); // Lấy id từ tham số URL
 
+  const [category, setCategory] = useState(0);
+  const [categories, setCategories] = useState([]);
+
   const [post, setPost] = useState({
     name: "",
     content: "",
@@ -55,7 +58,7 @@ const AdminEditPost = () => {
     if (post.img) {
       formData.append("img", post.img);
     }
-
+    formData.append("category", category);
     axios
       .put(`http://localhost:8080/api/posts/${id}`, formData)
       .then((response) => {
@@ -67,6 +70,17 @@ const AdminEditPost = () => {
 
     window.location.reload();
   };
+
+  //Goi API category cho vao Option de tao moi bai viet
+  useEffect(() => {
+    try {
+      axios
+        .get(`http://localhost:8080/api/categories`)
+        .then((response) => [setCategories(response.data)]);
+    } catch (error) {
+      console.error("Error get all categories !", error);
+    }
+  }, []);
 
   const context = useContext(ThemeContext);
 
@@ -146,7 +160,22 @@ const AdminEditPost = () => {
                       placeholder="Nhập tags, cách nhau bởi dấu phẩy"
                     />
                   </Form.Group>
-
+                  <Form.Group controlId="formPostCategory">
+                    <Form.Label>Danh mục</Form.Label>
+                    <Form.Control
+                      as="select" // Thay đổi từ type="text" thành as="select"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)} // Giá trị sẽ là ID của danh mục
+                      required
+                    >
+                      <option value="">Chọn một danh mục</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name} {/* Hiển thị tên danh mục */}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
                   <Button variant="primary" type="submit" className="mt-3">
                     Cập nhật bài viết
                   </Button>

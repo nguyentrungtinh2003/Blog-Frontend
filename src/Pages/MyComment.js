@@ -91,7 +91,9 @@ const MyComment = () => {
 
                 <td>
                   <a href={`/userEditComment/${comment.id}`}>
-                    <button className="btn btn-primary btn-sm mr-2">Sửa</button>
+                    <button className="btn btn-primary btn-sm m-2">
+                      <i className="fas fa-edit"></i>
+                    </button>
                   </a>
                   <button
                     className="btn btn-danger btn-sm"
@@ -99,7 +101,7 @@ const MyComment = () => {
                       handleDeleteComment(comment.id, comment.content)
                     }
                   >
-                    Xoá
+                    <i className="fas fa-remove"></i>
                   </button>
                 </td>
               </tr>

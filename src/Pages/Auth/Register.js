@@ -8,6 +8,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [img, setImg] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
@@ -20,21 +21,35 @@ const Register = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    if (img) {
+      formData.append("img", img);
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/auth/register",
+        formData,
         {
-          username,
-          password,
-          email,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
-      setMessage(response.data);
+      setMessage(response.data.message || "Registration successful");
       setError(false);
     } catch (error) {
-      setMessage("Registration failed");
+      // In ra thông tin chi tiết về lỗi
+      console.error("Error response:", error.response);
+      setMessage(error.response?.data?.message || "Registration failed");
       setError(true);
     }
+  };
+  const handleFileChange = (e) => {
+    setImg(e.target.files[0]);
   };
 
   const context = useContext(ThemeContext);
@@ -57,14 +72,31 @@ const Register = () => {
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group controlId="formUsername">
+              <Form.Group controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter email"
-                  value={username}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+              </Form.Group>
+              <Form.Group className="profile-form-group" controlId="formImg">
+                <Form.Label className="profile-form-label">Hình ảnh</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="img"
+                  onChange={handleFileChange}
+                />
+                {img && (
+                  <div className="mt-2">
+                    <img
+                      src={`http://localhost:8080/uploads/${img}`}
+                      alt="Hình ảnh hồ sơ"
+                      className="profile-form-img"
+                    />
+                  </div>
+                )}
               </Form.Group>
 
               <Form.Group controlId="formPassword" className="mt-3">

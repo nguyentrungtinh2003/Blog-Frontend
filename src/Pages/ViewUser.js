@@ -23,21 +23,25 @@ const ViewUser = () => {
       <Container>
         <Row className="justify-content-center">
           <Col md={8}>
-            <Card className="shadow-lg">
-              <Card.Header className="text-center ">
-                <h1>Thông tin người dùng</h1>
+            <Card className="shadow-lg border-0">
+              <Card.Header className=" text-black text-center">
+                <h1 className="mb-0">Thông tin người dùng</h1>
               </Card.Header>
-              <Card.Body className="p-4">
-                <Card.Title>Tên người dùng: {user.username}</Card.Title>
-                <Card.Title>Email: {user.email}</Card.Title>
-                <div className="text-center">
+              <Card.Body className="text-center">
+                <Card.Title className="mb-3">
+                  <h4>Tên người dùng: {user.username}</h4>
+                  <h5>Email: {user.email}</h5>
+                </Card.Title>
+                <div className="d-flex justify-content-center">
                   <img
                     src={`http://localhost:8080/uploads/${user.img}`}
                     alt={user.username}
-                    className="img-fluid rounded"
+                    className="img-fluid rounded-circle border"
                     style={{
-                      maxWidth: "200px",
-                      height: "auto",
+                      maxWidth: "150px",
+                      height: "150px",
+                      objectFit: "cover",
+                      border: "4px solid #007bff",
                       marginTop: "20px",
                     }}
                   />

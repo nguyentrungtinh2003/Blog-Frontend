@@ -1,10 +1,11 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import { ThemeContext } from "./ThemeContext";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 
-const AdminEditUser = () => {
+const UserEditProfile = () => {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     username: "",
@@ -44,6 +45,7 @@ const AdminEditUser = () => {
     if (formData.img) {
       data.append("img", formData.img);
     }
+
     axios
       .put(`http://localhost:8080/api/auth/users/${id}`, data, {
         headers: {
@@ -132,4 +134,4 @@ const AdminEditUser = () => {
   );
 };
 
-export default AdminEditUser;
+export default UserEditProfile;

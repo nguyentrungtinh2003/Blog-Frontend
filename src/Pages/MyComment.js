@@ -11,7 +11,9 @@ const MyComment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/comments/byUser/${id}`)
+      .get(`http://localhost:8080/api/comments/byUser/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setMyComment(response.data);
       })
@@ -29,7 +31,9 @@ const MyComment = () => {
 
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/comments/${id}`)
+        .delete(`http://localhost:8080/api/comments/${id}`, {
+          withCredentials: true,
+        })
         .then((response) => {
           console.log("Delete comment success !");
         })
@@ -79,33 +83,39 @@ const MyComment = () => {
             <tr>
               <th>Nội dung</th>
               <th>Ngày tạo</th>
-
               <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
-            {myComment.map((comment) => (
-              <tr key={comment.id}>
-                <td>{comment.content}</td>
-                <td>{getTimeElapsed(comment.createdAt)}</td>
-
-                <td>
-                  <a href={`/userEditComment/${comment.id}`}>
-                    <button className="btn btn-primary btn-sm m-2">
-                      <i className="fas fa-edit"></i>
+            {myComment.length > 0 ? (
+              myComment.map((comment) => (
+                <tr key={comment.id}>
+                  <td>{comment.content}</td>
+                  <td>{getTimeElapsed(comment.createdAt)}</td>
+                  <td>
+                    <a href={`/userEditComment/${comment.id}`}>
+                      <button className="btn btn-primary btn-sm m-2">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                    </a>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() =>
+                        handleDeleteComment(comment.id, comment.content)
+                      }
+                    >
+                      <i className="fas fa-trash"></i>
                     </button>
-                  </a>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() =>
-                      handleDeleteComment(comment.id, comment.content)
-                    }
-                  >
-                    <i className="fas fa-remove"></i>
-                  </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3" className="text-center">
+                  Không có bình luận nào !
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

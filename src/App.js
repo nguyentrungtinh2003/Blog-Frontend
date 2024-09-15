@@ -23,6 +23,10 @@ import ViewUser from "./Pages/ViewUser";
 import AdminAddCategory from "./Pages/AdminAddCategory";
 import AdminEditCategory from "./Pages/AdminEditCategory";
 import UserEditProfile from "./Pages/UserEditProfile";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword ";
 
 const App = () => {
   return (
@@ -32,6 +36,8 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/user" element={<UserPage />} />
           <Route path="/view/:id" element={<PostDetail />} />

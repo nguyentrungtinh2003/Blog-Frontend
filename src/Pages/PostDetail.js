@@ -107,7 +107,7 @@ const PostDetail = () => {
           <Card className="shadow-lg">
             <Card.Header className="d-flex align-items-center bg-white">
               <Image
-                src={`http://localhost:8080/uploads/${postDetail.img}`}
+                src={`http://localhost:8080/uploads/${postDetail.postedBy.img}`}
                 roundedCircle
                 style={{ width: "40px", height: "40px", marginRight: "10px" }}
               />
@@ -129,20 +129,40 @@ const PostDetail = () => {
               )}
               <p dangerouslySetInnerHTML={{ __html: postDetail.content }}></p>
               <a className="btn btn-link" href="/user">
-                <button className="btn btn-primary mt-2">Quay về</button>
+                <button className="btn btn-primary mt-2">
+                  {" "}
+                  <i className="fas fa-arrow-left"></i>
+                </button>
               </a>
             </Card.Body>
             <Card.Footer className="bg-light border-top">
               <div className="p-3">
-                <h5 className="mb-3">Bình luận</h5>
+                <h5 className="mb-3">
+                  <i
+                    className="fas fa-comments"
+                    style={{ color: "blue", fontSize: "24px" }}
+                  ></i>{" "}
+                  Bình luận
+                </h5>
                 {displayedComments.length > 0 ? (
                   displayedComments.map((comment) => (
                     <div
                       key={comment.id}
                       className="mb-3 p-3 border rounded bg-white shadow-sm"
                     >
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <strong>{comment.postedBy.username}</strong>
+                      <div className="d-flex align-items-center">
+                        <Image
+                          src={`http://localhost:8080/uploads/${comment.postedBy.img}`}
+                          roundedCircle
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            marginRight: "10px",
+                          }}
+                        />
+                        <strong className="m-2">
+                          {comment.postedBy.username}
+                        </strong>
                         <span className="text-muted small">
                           <strong>{getTimeElapsed(comment.createdAt)}</strong>
                         </span>
@@ -183,7 +203,7 @@ const PostDetail = () => {
                     className="mt-2"
                     disabled={loading}
                   >
-                    {loading ? "Đang gửi..." : "Đăng bình luận"}
+                    {loading ? "Đang gửi..." : <i className="fas fa-check"></i>}
                   </Button>
                 </Form>
               </div>

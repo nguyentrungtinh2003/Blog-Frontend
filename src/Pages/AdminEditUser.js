@@ -17,7 +17,9 @@ const AdminEditUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${id}`)
+      .get(`http://localhost:8080/api/auth/users/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setFormData(response.data);
       })
@@ -45,11 +47,16 @@ const AdminEditUser = () => {
       data.append("img", formData.img);
     }
     axios
-      .put(`http://localhost:8080/api/auth/users/${id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      .put(
+        `http://localhost:8080/api/auth/users/${id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      })
+        { withCredentials: true }
+      )
       .then((response) => {
         console.log("User updated successfully");
         // Có thể cập nhật state hoặc chuyển hướng mà không cần reload trang
@@ -124,7 +131,7 @@ const AdminEditUser = () => {
           </Form.Group>
 
           <Button variant="primary" type="submit" className="mt-3 w-100">
-            Lưu
+            <li className="fas fa-check"></li>
           </Button>
         </Form>
       </Container>

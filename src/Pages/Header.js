@@ -18,8 +18,8 @@ const Header = () => {
   const context = useContext(ThemeContext);
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand as={Link} to="/">
+    <Navbar bg="light" variant="light" expand="lg" className="custom-navbar">
+      <Navbar.Brand as={Link} to="/" style={{ color: "blue" }}>
         Blog Application
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -27,7 +27,10 @@ const Header = () => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/">
-            <i className="fas fa-home"></i>
+            <i
+              className="fas fa-home"
+              style={{ color: "blue", fontSize: "20px" }}
+            ></i>
           </Nav.Link>
         </Nav>
         <button onClick={context.toggleTheme} className="btn btn-primary m-2">
@@ -44,18 +47,29 @@ const Header = () => {
                 />
                 <Nav.Link
                   href="/user"
-                  className="text-white text-decoration-none ms-2" // Thêm khoảng cách giữa ảnh và tên người dùng
+                  className="text-dark ms-2" // Thay đổi màu chữ thành đen
                 >
                   <span>{`${user} ID: ${userId}`}</span>
                 </Nav.Link>
               </div>
 
-              <Nav.Link onClick={handleLogout}>Đăng xuất</Nav.Link>
+              <Nav.Link onClick={handleLogout} className="text-dark">
+                <i
+                  class="fas fa-sign-out-alt"
+                  style={{ color: "blue", fontSize: "20px" }}
+                ></i>
+              </Nav.Link>
             </>
           ) : (
-            <Nav.Link as={Link} to="/login">
-              <i className="fa fa-user me-2"></i>
-              Đăng nhập
+            <Nav.Link as={Link} to="/login" className="text-dark">
+              <i
+                className="fa fa-user me-2"
+                style={{ color: "blue", fontSize: "20px" }}
+              ></i>
+              <i
+                class="fas fa-sign-in-alt"
+                style={{ color: "blue", fontSize: "20px" }}
+              ></i>
             </Nav.Link>
           )}
         </Nav>

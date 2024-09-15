@@ -11,7 +11,9 @@ const MyPosts = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/posts/byUser/${id}`)
+      .get(`http://localhost:8080/api/posts/byUser/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setMyPost(response.data);
       })
@@ -28,7 +30,9 @@ const MyPosts = () => {
     );
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/posts/${postId}`)
+        .delete(`http://localhost:8080/api/posts/${postId}`, {
+          withCredentials: true,
+        })
         .then((response) => {
           console.log("Delete post success");
           // Xóa bài viết khỏi state sau khi xóa thành công
@@ -58,37 +62,43 @@ const MyPosts = () => {
             </tr>
           </thead>
           <tbody>
-            {myPost.map((post) => (
-              <tr key={post.id}>
-                <td>{post.name}</td>
-                <td dangerouslySetInnerHTML={{ __html: post.content }}></td>
-                <td>
-                  {post.img && (
-                    <img
-                      src={`http://localhost:8080/uploads/${post.img}`}
-                      alt={post.name}
-                      className="img-fluid"
-                      style={{ maxWidth: "100px", height: "auto" }}
-                    />
-                  )}
-                </td>
-
-                <td>
-                  <a href={`/userEditPost/${post.id}`}>
-                    <button className="btn btn-primary btn-sm m-2">
-                      {" "}
-                      <i className="fas fa-edit"></i>
+            {myPost.length > 0 ? (
+              myPost.map((post) => (
+                <tr key={post.id}>
+                  <td>{post.name}</td>
+                  <td dangerouslySetInnerHTML={{ __html: post.content }}></td>
+                  <td>
+                    {post.img && (
+                      <img
+                        src={`http://localhost:8080/uploads/${post.img}`}
+                        alt={post.name}
+                        className="img-fluid"
+                        style={{ maxWidth: "100px", height: "auto" }}
+                      />
+                    )}
+                  </td>
+                  <td>
+                    <a href={`/userEditPost/${post.id}`}>
+                      <button className="btn btn-primary btn-sm m-2">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                    </a>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDeletePost(post.id, post.name)}
+                    >
+                      <i className="fas fa-trash"></i>
                     </button>
-                  </a>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeletePost(post.id, post.name)}
-                  >
-                    <i className="fas fa-remove"></i>
-                  </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  Không có bài viết nào !
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -11,7 +11,7 @@ const PostManager = () => {
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:8080/posts")
+      .get("http://localhost:8080/posts", { withCredentials: true })
       .then((response) => {
         setPosts(response.data);
       })
@@ -25,7 +25,11 @@ const PostManager = () => {
 
     // Send the content to the backend
     axios
-      .post("http://localhost:8080/posts", { content })
+      .post(
+        "http://localhost:8080/posts",
+        { content },
+        { withCredentials: true }
+      )
       .then((response) => {
         alert("Post added successfully");
         fetchPosts(); // Refresh posts after adding

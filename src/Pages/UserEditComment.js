@@ -15,7 +15,9 @@ const UserEditComment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/comments/${id}`)
+      .get(`http://localhost:8080/api/comments/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setComment(response.data);
       })
@@ -33,7 +35,9 @@ const UserEditComment = () => {
     e.preventDefault();
 
     axios
-      .put(`http://localhost:8080/api/comments/${id}`, comment)
+      .put(`http://localhost:8080/api/comments/${id}`, comment, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("Comment updated successfully");
         navigate(-1); // Navigate to the comment view or list page
@@ -66,7 +70,7 @@ const UserEditComment = () => {
                     />
                   </Form.Group>
                   <Button variant="primary" type="submit" className="mt-3">
-                    Lưu
+                    <li className="fas fa-check"></li>
                   </Button>
                 </Form>
               </Card.Body>

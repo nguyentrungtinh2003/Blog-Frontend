@@ -19,10 +19,15 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/auth/login",
-        { username, password }
+        { username, password },
+        { withCredentials: true }
       );
       const { username: loggedInUser, id: loggedInUserId, img } = response.data;
-      setMessage(`User: ${loggedInUser} logged in successfully!`);
+      if (loggedInUser) {
+        setMessage(`User: ${loggedInUser} logged in successfully!`);
+      } else {
+        setMessage("Login failed! User not found.");
+      }
       setError(false);
       setUser(loggedInUser);
       setUserId(loggedInUserId);
@@ -32,6 +37,9 @@ const Login = () => {
       }
       if (username) {
         navigate("/user");
+      }
+      if (username == null) {
+        navigate("/login");
       } else {
         navigate("/login");
       }

@@ -12,6 +12,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -37,7 +38,8 @@ const Register = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
+        { withCredentials: true }
       );
       setMessage(response.data.message || "Registration successful");
       setError(false);
@@ -50,6 +52,10 @@ const Register = () => {
   };
   const handleFileChange = (e) => {
     setImg(e.target.files[0]);
+  };
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const context = useContext(ThemeContext);
@@ -82,7 +88,7 @@ const Register = () => {
                 />
               </Form.Group>
               <Form.Group className="profile-form-group" controlId="formImg">
-                <Form.Label className="profile-form-label">Hình ảnh</Form.Label>
+                <Form.Label>Hình ảnh</Form.Label>
                 <Form.Control
                   type="file"
                   name="img"
@@ -102,24 +108,34 @@ const Register = () => {
               <Form.Group controlId="formPassword" className="mt-3">
                 <Form.Label>Mật khẩu</Form.Label>
                 <Form.Control
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
+              <Button onClick={togglePassword} className="m-3 ">
+                <i
+                  className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </Button>
 
               <Form.Group controlId="formConfirmPassword" className="mt-3">
                 <Form.Label>Xác nhận mật khẩu</Form.Label>
                 <Form.Control
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Form.Group>
+              <Button onClick={togglePassword} className="m-3 ">
+                <i
+                  className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                ></i>
+              </Button>
 
-              <Button variant="primary" type="submit" className="mt-3">
+              <Button variant="primary" type="submit" className="m-3">
                 Đăng ký
               </Button>
               <div className="mt-3">

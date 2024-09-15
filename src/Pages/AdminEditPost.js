@@ -60,7 +60,9 @@ const AdminEditPost = () => {
     }
     formData.append("category", category);
     axios
-      .put(`http://localhost:8080/api/posts/${id}`, formData)
+      .put(`http://localhost:8080/api/posts/${id}`, formData, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("Post updated successfully");
       })
@@ -75,7 +77,7 @@ const AdminEditPost = () => {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/api/categories`)
+        .get(`http://localhost:8080/api/categories`, { withCredentials: true })
         .then((response) => [setCategories(response.data)]);
     } catch (error) {
       console.error("Error get all categories !", error);
@@ -177,7 +179,7 @@ const AdminEditPost = () => {
                     </Form.Control>
                   </Form.Group>
                   <Button variant="primary" type="submit" className="mt-3">
-                    Cập nhật bài viết
+                    <li className="fas fa-check"></li>
                   </Button>
                 </Form>
               </Card.Body>

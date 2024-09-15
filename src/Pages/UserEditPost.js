@@ -20,7 +20,7 @@ const UserEditPost = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/posts/${id}`)
+      .get(`http://localhost:8080/api/posts/${id}`, { withCredentials: true })
       .then((response) => {
         setPost(response.data);
       })
@@ -61,7 +61,9 @@ const UserEditPost = () => {
     formData.append("category", category);
 
     axios
-      .put(`http://localhost:8080/api/posts/${id}`, formData)
+      .put(`http://localhost:8080/api/posts/${id}`, formData, {
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("Post updated successfully");
         console.log("Form date : " + formData);
@@ -77,7 +79,7 @@ const UserEditPost = () => {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/api/categories`)
+        .get(`http://localhost:8080/api/categories`, { withCredentials: true })
         .then((response) => [setCategories(response.data)]);
     } catch (error) {
       console.error("Error get all categories !", error);
@@ -180,7 +182,7 @@ const UserEditPost = () => {
                   </Form.Group>
 
                   <Button variant="primary" type="submit" className="mt-3">
-                    Lưu
+                    <li className="fas fa-check"></li>
                   </Button>
                 </Form>
               </Card.Body>

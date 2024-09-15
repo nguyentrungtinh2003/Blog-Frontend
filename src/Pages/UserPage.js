@@ -5,6 +5,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Dropdown, Badge } from "react-bootstrap";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Container,
   Row,
@@ -40,11 +42,16 @@ const UserPage = () => {
   const [img, setImg] = useState(null);
   const [tags, setTags] = useState("");
   const [category, setCategory] = useState(0);
+  const [notificationType, setNotificationType] = useState("");
+  const [recipientEmail, setRecipientEmail] = useState("");
   const [findCategory, setFindCategory] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [notification, setNotification] = useState([]);
   const [users, setuser] = useState({});
+  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState("");
+  const [contentSearch, setContentSearch] = useState("");
   // const [postedBy, setPostedBy] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -72,7 +79,9 @@ const UserPage = () => {
           const initialComments = {};
           response.data.forEach((post) => {
             axios
-              .get(`http://localhost:8080/api/comments/${post.id}`)
+              .get(`http://localhost:8080/api/comments/${post.id}`, {
+                withCredentials: true,
+              })
               .then((commentResponse) => {
                 initialComments[post.id] = commentResponse.data;
                 setComments(initialComments);
@@ -181,7 +190,9 @@ const UserPage = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("content", content);
-    formData.append("img", img); // appending file here
+    if (img) {
+      formData.append("img", img); // appending file here
+    }
     formData.append(
       "tags",
       tags
@@ -191,6 +202,8 @@ const UserPage = () => {
     ); // convert array to comma-separated string
     formData.append("postedBy", userId);
     formData.append("category", category);
+    formData.append("notificationType", notificationType);
+    formData.append("recipientEmail", recipientEmail);
 
     axios
       .post("http://localhost:8080/api/posts", formData, {
@@ -206,12 +219,16 @@ const UserPage = () => {
         setTags("");
 
         handleCloseModal();
+
+        // Hiển thị thông báo thành công
+        toast.success(`Thêm bài viết ${name} thành công !`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
       })
       .catch((error) => {
         console.error("Error adding post:", error);
       });
-
-    window.location.reload();
   };
 
   const handleCommentSubmit = (event, postId) => {
@@ -316,6 +333,7 @@ const UserPage = () => {
       .catch((error) => {
         console.error("Có lỗi khi đánh dấu thông báo là đã đọc:", error);
       });
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -342,6 +360,36 @@ const UserPage = () => {
         console.log("Get category navbar error ! ");
       });
   };
+  // Search with design pattern
+  const handleSearchDesignpattern = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/posts/search",
+        {
+          params: {
+            author,
+            title,
+            content,
+          },
+        }
+      );
+      // Hiển thị thông báo thành công
+      toast.success("Thành công !", {
+        position: "top-right", // Sửa vị trí ở đây
+        autoClose: 3000, // Tự động đóng sau 3 giây
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi tìm kiếm:", error);
+      // Thêm thông báo lỗi nếu cần
+      toast.error("Có lỗi xảy ra!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  };
+  //
 
   const context = useContext(ThemeContext);
 
@@ -382,7 +430,8 @@ const UserPage = () => {
         </div>
 
         <div className={`col-10`}>
-          <div className={`${context.theme} fixed-top-bar`}>
+          <div className={`${context.theme} `}>
+            {/* fixed-top-bar*/}
             <Row className={`${context.theme} justify-content-center`}>
               <Col xs="auto" className={context.theme}>
                 <Button
@@ -498,7 +547,52 @@ const UserPage = () => {
                 </Button>
               </Col>
             </Row>
+            <div className="container mt-5">
+              {/* <h1 className="text-center mb-4">Tìm kiếm bài viết</h1> */}
+              <form
+                onSubmit={handleSearchDesignpattern}
+                className="border p-4 shadow-sm bg-light"
+              >
+                <div className="form-group mb-3">
+                  <label htmlFor="author">Người tạo:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="author"
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                    placeholder="Tìm theo người tạo"
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <label htmlFor="title">Tiêu đề:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Tìm theo tiêu đề"
+                  />
+                </div>
+                <div className="form-group mb-3">
+                  <label htmlFor="content">Nội dung:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Tìm theo nội dung"
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary ">
+                  <li className="fas fa-search"></li>
+                </button>
+              </form>
+            </div>
           </div>
+          <ToastContainer />
 
           <div className={`${context.theme} scrollable-content`}>
             <Container>
@@ -571,7 +665,7 @@ const UserPage = () => {
                             variant="link"
                             className="text-primary text-decoration-none custom-like-button"
                           >
-                            <FaEye /> {pos.viewCount - 1} Lượt xem
+                            <FaEye /> {pos.viewCount} Lượt xem
                           </Button>
                         </div>
                       </Card.Footer>
@@ -642,8 +736,26 @@ const UserPage = () => {
                         ))}
                       </Form.Control>
                     </Form.Group>
+                    <Form.Group controlId="formToEmail">
+                      <Form.Label>Thông báo đến</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nhập email người nhận"
+                        value={recipientEmail}
+                        onChange={(e) => setRecipientEmail(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formSend">
+                      <Form.Label>Gửi thông báo qua</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Gửi qua Email, SMS, Push ..."
+                        value={notificationType}
+                        onChange={(e) => setNotificationType(e.target.value)}
+                      />
+                    </Form.Group>
                     <Button variant="primary" type="submit" className="mt-2">
-                      Đăng
+                      <li className="fas fa-check"></li>
                     </Button>
                   </Form>
                 </Modal.Body>

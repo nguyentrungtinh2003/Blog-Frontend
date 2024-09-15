@@ -11,7 +11,9 @@ const ViewUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${id}`)
+      .get(`http://localhost:8080/api/auth/users/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => setUser(response.data))
       .catch((error) => {
         console.log("Error get user by id !");

@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import { ThemeContext } from "./ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminPage = () => {
   const [userCount, setUserCount] = useState(0);
@@ -96,8 +98,6 @@ const AdminPage = () => {
         .catch((error) => {
           console.error("Error delete user", error);
         });
-
-      window.location.reload();
     }
   };
 
@@ -111,6 +111,11 @@ const AdminPage = () => {
         .delete(`http://localhost:8080/api/categories/${id}`)
         .then((response) => {
           console.log("Delete category success");
+          // Hiển thị thông báo thành công
+          toast.success(`Xoá danh mục ${name} thành công !`, {
+            position: "top-right",
+            autoClose: 3000, // Tự động đóng sau 3 giây
+          });
         })
         .catch((error) => {
           console.error("Error delete category", error);
@@ -129,35 +134,142 @@ const AdminPage = () => {
       axios
         .delete(`http://localhost:8080/api/posts/${id}`)
         .then((response) => {
-          console.log("Delete user success");
+          console.log("Delete post success");
+          // Hiển thị thông báo thành công
+          toast.success(`Xoá bài viết ${name} thành công !`, {
+            position: "top-right",
+            autoClose: 3000, // Tự động đóng sau 3 giây
+          });
         })
         .catch((error) => {
-          console.error("Error delete user");
+          console.error("Error delete post");
         });
+    }
+  };
 
+  const handleDeleteComment = (id, content) => {
+    const userConfirm = window.confirm(
+      `Bạn có muốn xoá bình luận ${content} không !`
+    );
+
+    if (userConfirm) {
+      axios
+        .delete(`http://localhost:8080/api/comments/${id}`)
+        .then((response) => {
+          console.log("Delete comment success !");
+          // Hiển thị thông báo thành công
+          toast.success(`Xoá bình luận ${content} thành công !`, {
+            position: "top-right",
+            autoClose: 3000, // Tự động đóng sau 3 giây
+          });
+        })
+        .catch((error) => {
+          console.log("Error delete comment !");
+        });
       window.location.reload();
     }
+  };
+
+  // Hiển thị thời gian đăng bài viết
+  const getTimeElapsed = (postDate) => {
+    const currentDate = new Date();
+    const postDateTime = new Date(postDate);
+
+    const elapsedMilliseconds = currentDate - postDateTime;
+    const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+    const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+    const elapsedHours = Math.floor(elapsedMinutes / 60);
+    const elapsedDays = Math.floor(elapsedHours / 24);
+
+    // Check if post date is in the current or previous year
+    const postYear = postDateTime.getFullYear();
+    const currentYear = currentDate.getFullYear();
+
+    if (elapsedDays > 365) {
+      return `${Math.floor(elapsedDays / 365)} năm trước`;
+    } else if (elapsedDays > 30) {
+      return `${Math.floor(elapsedDays / 30)} tháng trước`;
+    } else if (elapsedDays > 0) {
+      return `${elapsedDays} ngày trước`;
+    } else if (elapsedHours > 0) {
+      return `${elapsedHours} giờ trước`;
+    } else if (elapsedMinutes > 0) {
+      return `${elapsedMinutes} phút trước`;
+    } else if (elapsedSeconds > 0) {
+      return `${elapsedSeconds} giây trước`;
+    } else {
+      return "vừa xong";
+    }
+  };
+
+  // active user
+  const activateUser = async (userId, enable) => {
+    try {
+      await axios.put(`http://localhost:8080/api/auth/${userId}/enable`, null, {
+        params: {
+          enable: enable,
+        },
+      });
+      console.log("User updated successfully");
+    } catch (error) {
+      console.error("Error updating user", error);
+    }
+  };
+
+  // Ví dụ sử dụng hàm activateUser trong một component
+  const handleActivateUser = (id) => {
+    activateUser(id, true);
+  };
+
+  const handleKickUser = (id) => {
+    activateUser(id, false);
+  };
+
+  //
+
+  const handelSendEmailWarning = (email) => {
+    axios
+      .post(`http://localhost:8080/api/email/sendWarning`, { email: email })
+      .then((response) => {
+        console.log(`Send email warning with email : ${email} success !`);
+      })
+      .catch((error) => {
+        console.log(`Fail send email with email : ${email} !`);
+      });
   };
 
   const context = useContext(ThemeContext);
   return (
     <div className={`${context.theme}`}>
+      <ToastContainer />
       <Container>
-        <h2 className="mb-4">Bảng điều khiển</h2>
+        <h2 className="mb-4">
+          <i
+            className="fas fa-tachometer-alt"
+            style={{ color: "blue", fontSize: "30px" }}
+          ></i>
+        </h2>
 
         <div className="card-container d-flex justify-content-around flex-wrap">
           {/* Users Card */}
           <Card
             style={{ width: "18rem" }}
-            className={`mb-4 ${selectedCard === "users" ? "selected" : ""}`}
+            className={`mb-4 ${
+              selectedCard === "users" ? "selected" : ""
+            } shadow-lg`}
             onClick={fetchUsers}
           >
             <Card.Body>
               <Card.Title>
                 {" "}
-                <i className="fas fa-user"></i>
+                <i
+                  className="fas fa-user"
+                  style={{ color: "blue", fontSize: "24px" }}
+                ></i>
               </Card.Title>
-              <Card.Text>Tổng: {userCount}</Card.Text>
+              <Card.Text style={{ fontSize: "1.5rem" }}>
+                Tổng: <strong>{userCount}</strong>
+              </Card.Text>
               <Button variant="primary">Quản lí người dùng</Button>
             </Card.Body>
           </Card>
@@ -165,15 +277,22 @@ const AdminPage = () => {
           {/* Posts Card */}
           <Card
             style={{ width: "18rem" }}
-            className={`mb-4 ${selectedCard === "posts" ? "selected" : ""}`}
+            className={`mb-4 ${
+              selectedCard === "posts" ? "selected" : ""
+            } shadow-lg`}
             onClick={fetchPosts}
           >
             <Card.Body>
               <Card.Title>
                 {" "}
-                <i className="fas fa-book"></i>
+                <i
+                  className="fas fa-book"
+                  style={{ color: "blue", fontSize: "24px" }}
+                ></i>
               </Card.Title>
-              <Card.Text>Tổng: {postCount}</Card.Text>
+              <Card.Text style={{ fontSize: "1.5rem" }}>
+                Tổng: <strong>{postCount}</strong>
+              </Card.Text>
               <Button variant="primary">Quản lí bài viết</Button>
             </Card.Body>
           </Card>
@@ -183,14 +302,19 @@ const AdminPage = () => {
             style={{ width: "18rem" }}
             className={`mb-4 ${
               selectedCard === "categories" ? "selected" : ""
-            }`}
+            } shadow-lg`}
           >
             <Card.Body>
               <Card.Title>
                 {" "}
-                <i className="fas fa-th"></i>
+                <i
+                  className="fas fa-th"
+                  style={{ color: "blue", fontSize: "24px" }}
+                ></i>
               </Card.Title>
-              <Card.Text>Tổng: {categoryCount}</Card.Text>
+              <Card.Text style={{ fontSize: "1.5rem" }}>
+                Tổng: <strong>{categoryCount}</strong>
+              </Card.Text>
               <Button variant="primary" className="m-2">
                 <a
                   href={`/addCategory`}
@@ -208,14 +332,21 @@ const AdminPage = () => {
           {/* Comments Card */}
           <Card
             style={{ width: "18rem" }}
-            className={`mb-4 ${selectedCard === "comments" ? "selected" : ""}`}
+            className={`mb-4 ${
+              selectedCard === "comments" ? "selected" : ""
+            } shadow-lg`}
           >
             <Card.Body>
               <Card.Title>
                 {" "}
-                <i className="fas fa-comment"></i>
+                <i
+                  className="fas fa-comments"
+                  style={{ color: "blue", fontSize: "24px" }}
+                ></i>
               </Card.Title>
-              <Card.Text>Tổng: {commentCount}</Card.Text>
+              <Card.Text style={{ fontSize: "1.5rem" }}>
+                Tổng: <strong>{commentCount}</strong>
+              </Card.Text>
               <Button variant="primary" onClick={fetchComments}>
                 Quản lí bình luận
               </Button>
@@ -226,8 +357,13 @@ const AdminPage = () => {
         {/* Display Users Table */}
         {selectedCard === "users" && users.length > 0 && (
           <div>
-            <h3 className="mb-3">Người dùng</h3>
-            <Table striped bordered hover>
+            <h3 className="mb-3">
+              <li
+                className="fas fa-user"
+                style={{ color: "blue", fontSize: "30px" }}
+              ></li>
+            </h3>
+            <Table striped bordered hover className="shadow-lg">
               <thead>
                 <tr>
                   <th>#</th>
@@ -248,15 +384,15 @@ const AdminPage = () => {
                         src={`http://localhost:8080/uploads/${user.img}`}
                         alt={user.username}
                         style={{
-                          width: "100px", // Chiều rộng tối đa
-                          height: "100px", // Chiều cao tối đa
+                          width: "60px", // Chiều rộng tối đa
+                          height: "60px", // Chiều cao tối đa
                           objectFit: "cover", // Đảm bảo hình ảnh vừa vặn trong khung
                           borderRadius: "5px", // Bo góc cho hình ảnh mềm mại hơn
                         }}
                       />
                     </td>
                     <td>
-                      <Button variant="info" className="mr-2">
+                      <Button variant="info" className="m-2">
                         <a
                           href={`/viewUser/${user.id}`}
                           className="text-white text-decoration-none"
@@ -272,12 +408,36 @@ const AdminPage = () => {
                           <i className="fas fa-edit"></i>
                         </a>
                       </Button>
-                      <Button variant="danger" className="mr-2">
+                      {/* <Button variant="danger" className="mr-2">
                         <a
                           onClick={() => deleteHandel(user.id, user.username)}
                           className="text-white text-decoration-none"
                         >
                           <i className="fas fa-remove"></i>
+                        </a>
+                      </Button> */}
+                      <Button variant="primary" className="m-2">
+                        <a
+                          onClick={() => handleActivateUser(user.id)}
+                          className="text-white text-decoration-none"
+                        >
+                          <i className="fas fa-unlock"></i>
+                        </a>
+                      </Button>
+                      <Button variant="danger" className="m-2">
+                        <a
+                          onClick={() => handleKickUser(user.id)}
+                          className="text-white text-decoration-none"
+                        >
+                          <i className="fas fa-lock"></i>
+                        </a>
+                      </Button>
+                      <Button variant="warning" className="m-2">
+                        <a
+                          onClick={() => handelSendEmailWarning(user.email)}
+                          className="text-white text-decoration-none"
+                        >
+                          <i className="fas fa-envelope"></i>
                         </a>
                       </Button>
                     </td>
@@ -291,14 +451,19 @@ const AdminPage = () => {
         {/* Display Posts Table */}
         {selectedCard === "posts" && posts.length > 0 && (
           <div>
-            <h3 className="mb-3">Bài viết</h3>
-            <Table striped bordered hover>
+            <h3 className="mb-3">
+              <li
+                className="fas fa-book"
+                style={{ color: "blue", fontSize: "30px" }}
+              ></li>
+            </h3>
+            <Table striped bordered hover className="shadow-lg">
               <thead>
                 <tr>
                   <th className="text-center">#</th>
                   <th>Tên</th>
                   <th>Nội dung</th>
-                  <th>Người dùng</th>
+                  <th>Người đăng</th>
                   <th>Hình ảnh</th>
                   <th>Hành động</th>
                 </tr>
@@ -349,13 +514,19 @@ const AdminPage = () => {
         {/* Display Users Table */}
         {selectedCard === "categories" && category.length > 0 && (
           <div>
-            <h3 className="mb-3">Danh mục</h3>
-            <Table striped bordered hover>
+            <h3 className="mb-3">
+              <li
+                className="fas fa-th"
+                style={{ color: "blue", fontSize: "30px" }}
+              ></li>
+            </h3>
+            <Table striped bordered hover className="shadow-lg">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Tên</th>
                   <th>Bài viết</th>
+                  <th>Hình ảnh</th>
                   <th>Hành động</th>
                 </tr>
               </thead>
@@ -368,6 +539,20 @@ const AdminPage = () => {
                       {cate.posts.map((post) => (
                         <div key={post.id}>{post.name}</div>
                       ))}
+                    </td>
+                    <td>
+                      {cate.posts.map(
+                        (post) =>
+                          post.img && (
+                            <img
+                              key={post.id}
+                              src={`http://localhost:8080/uploads/${post.img}`}
+                              alt={post.name}
+                              className="img-fluid"
+                              style={{ maxWidth: "60px", height: "auto" }}
+                            />
+                          )
+                      )}
                     </td>
                     <td>
                       <Button variant="primary" className="m-2">
@@ -399,13 +584,20 @@ const AdminPage = () => {
         {/* Display Users Table */}
         {selectedCard === "comments" && comments.length > 0 && (
           <div>
-            <h3 className="mb-3">Bình luận</h3>
-            <Table striped bordered hover>
+            <h3 className="mb-3">
+              <li
+                className="fas fa-comments"
+                style={{ color: "blue", fontSize: "30px" }}
+              ></li>
+            </h3>
+            <Table striped bordered hover className="shadow-lg">
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Nội dung</th>
                   <th>Ngày tạo</th>
+                  <th>Người đăng</th>
+                  <th>Hình ảnh</th>
                   <th>Hành động</th>
                 </tr>
               </thead>
@@ -414,7 +606,18 @@ const AdminPage = () => {
                   <tr key={comment.id}>
                     <td>{index + 1}</td>
                     <td>{comment.content}</td>
-                    <td>{comment.createdAt}</td>
+                    <td>{getTimeElapsed(comment.createdAt)}</td>
+                    <td>{comment.postedBy.username}</td>
+                    <td>
+                      {comment.postedBy.img && (
+                        <img
+                          src={`http://localhost:8080/uploads/${comment.postedBy.img}`}
+                          alt={comment.postedBy.username}
+                          className="img-fluid"
+                          style={{ maxWidth: "60px", height: "auto" }}
+                        />
+                      )}
+                    </td>
                     <td>
                       {/* <Button variant="primary" className="mr-2">
                         <a
@@ -423,15 +626,17 @@ const AdminPage = () => {
                         >
                           Edit
                         </a>
-                      </Button>
+                      </Button> */}
                       <Button variant="danger" className="mr-2">
                         <a
-                          onClick={() => deleteHandel(user.id)}
+                          onClick={() =>
+                            handleDeleteComment(comment.id, comment.content)
+                          }
                           className="text-white text-decoration-none"
                         >
-                          Delete
+                          <i className="fas fa-remove"></i>
                         </a>
-                      </Button> */}
+                      </Button>
                     </td>
                   </tr>
                 ))}

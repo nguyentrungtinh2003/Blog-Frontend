@@ -10,7 +10,9 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/posts/newPost")
+      .get("http://192.168.1.6:8080/api/posts/newPost", {
+        withCredentials: true,
+      })
       .then((response) => {
         setNewPost(response.data);
       })
@@ -21,7 +23,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/posts")
+      .get("http://localhost:8080/api/posts", { withCredentials: true })
       .then((response) => {
         setPosts(response.data);
       })
@@ -124,7 +126,7 @@ const Home = () => {
         </Carousel>
         <h2 className="text-center my-4">Giới thiệu về chúng tôi</h2>
         <Row className="my-4">
-          <Col md={6}>
+          <Col md={6} className="shadow-lg">
             <h3 className="text-center">Nhóm sáng lập</h3>
             <Card className="mb-4 shadow-sm">
               <Card.Img
@@ -149,7 +151,7 @@ const Home = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="shadow-lg">
             <h3 className="text-center">Giới thiệu về blog</h3>
             <Card className="mb-4 shadow-sm">
               <Card.Img
@@ -189,25 +191,42 @@ const Home = () => {
         <h2 className="text-center my-4">Bài viết mới</h2>
         <Row>
           {newPost.map((post, index) => (
-            <Col md={4} key={index}>
+            <Col md={4} key={index} className="shadow-lg">
               <Card className="mb-4">
                 <Card.Img
                   variant="top"
                   src={
-                    `http://localhost:8080/uploads/${post.img}` ||
-                    "https://via.placeholder.com/150"
+                    post.img
+                      ? `http://localhost:8080/uploads/${post.img}`
+                      : "https://via.placeholder.com/150"
                   }
                 />
                 <Card.Body>
-                  <Card.Title>{post.name}</Card.Title>
-
+                  <div className="d-flex align-items-center mb-2">
+                    <img
+                      src={`http://localhost:8080/uploads/${post.postedBy.img}`}
+                      alt="User"
+                      className="rounded-circle"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "cover",
+                        marginRight: "10px",
+                      }}
+                    />
+                    <div>
+                      <Card.Text className="mb-1">
+                        <strong>{post.postedBy.username}</strong>
+                      </Card.Text>
+                      <Card.Title className="mb-0">{post.name}</Card.Title>
+                    </div>
+                  </div>
                   <Card.Text>
-                    {" "}
                     <strong>{getTimeElapsed(post.date)}</strong>
                   </Card.Text>
                   {/* <Button variant="primary" href="/article/1">
-                  Read more
-                </Button> */}
+          Read more
+        </Button> */}
                 </Card.Body>
               </Card>
             </Col>

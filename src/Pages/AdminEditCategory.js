@@ -30,7 +30,9 @@ const AdminEditCategory = () => {
 
   const handleEditCategory = () => {
     axios
-      .put(`http://localhost:8080/api/categories/${id}`, category) // Thay POST bằng PUT cho cập nhật
+      .put(`http://localhost:8080/api/categories/${id}`, category, {
+        withCredentials: true,
+      }) // Thay POST bằng PUT cho cập nhật
       .then((response) => {
         console.log("Category updated successfully!");
       })
@@ -54,7 +56,7 @@ const AdminEditCategory = () => {
           />
         </Form.Group>
         <Button variant="primary" onClick={handleEditCategory} className="mt-3">
-          Lưu thay đổi
+          <li className="fas fa-check"></li>
         </Button>
       </Form>
     </Container>

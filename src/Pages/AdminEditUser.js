@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import { ThemeContext } from "./ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminEditUser = () => {
   const { id } = useParams();
@@ -60,6 +62,11 @@ const AdminEditUser = () => {
       .then((response) => {
         console.log("User updated successfully");
         // Có thể cập nhật state hoặc chuyển hướng mà không cần reload trang
+        // Hiển thị thông báo thành công
+        toast.success(`Chỉnh người dùng thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
       })
       .catch((error) => {
         console.error("Error updating user!", error);
@@ -73,6 +80,7 @@ const AdminEditUser = () => {
   const context = useContext(ThemeContext);
   return (
     <div className={context.theme}>
+      <ToastContainer />
       <Container className="profile-form-container">
         <h2 className="text-center mb-4">Chỉnh sửa hồ sơ</h2>
         <Form onSubmit={handleSubmit}>
@@ -130,7 +138,7 @@ const AdminEditUser = () => {
             )}
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="mt-3 w-100">
+          <Button variant="primary" type="submit" className="mt-3 ">
             <li className="fas fa-check"></li>
           </Button>
         </Form>

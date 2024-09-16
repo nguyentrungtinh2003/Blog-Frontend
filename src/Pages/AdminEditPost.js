@@ -3,6 +3,8 @@ import axios from "axios";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminEditPost = () => {
   const { id } = useParams(); // Lấy id từ tham số URL
@@ -65,12 +67,15 @@ const AdminEditPost = () => {
       })
       .then((response) => {
         console.log("Post updated successfully");
+        // Hiển thị thông báo thành công
+        toast.success(`Chỉnh bài viết thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
       })
       .catch((error) => {
         console.log("Error updating post", error.response.data);
       });
-
-    window.location.reload();
   };
 
   //Goi API category cho vao Option de tao moi bai viet
@@ -88,6 +93,7 @@ const AdminEditPost = () => {
 
   return (
     <div className={context.theme}>
+      <ToastContainer />
       <Container>
         <Row className="justify-content-center">
           <Col md={8}>

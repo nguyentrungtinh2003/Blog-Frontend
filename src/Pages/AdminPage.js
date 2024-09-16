@@ -116,12 +116,14 @@ const AdminPage = () => {
             position: "top-right",
             autoClose: 3000, // Tự động đóng sau 3 giây
           });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         })
         .catch((error) => {
           console.error("Error delete category", error);
         });
-
-      window.location.reload();
     }
   };
 
@@ -140,6 +142,10 @@ const AdminPage = () => {
             position: "top-right",
             autoClose: 3000, // Tự động đóng sau 3 giây
           });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         })
         .catch((error) => {
           console.error("Error delete post");
@@ -162,11 +168,14 @@ const AdminPage = () => {
             position: "top-right",
             autoClose: 3000, // Tự động đóng sau 3 giây
           });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         })
         .catch((error) => {
           console.log("Error delete comment !");
         });
-      window.location.reload();
     }
   };
 

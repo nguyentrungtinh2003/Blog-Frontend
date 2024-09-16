@@ -25,6 +25,7 @@ const ForgotPassword = () => {
   return (
     <div>
       <h2>Quên mật khẩu</h2>
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -33,7 +34,9 @@ const ForgotPassword = () => {
           placeholder="Nhập email của bạn"
           required
         />
-        <button type="submit">Gửi OTP</button>
+        <button type="submit" className="btn btn-primary">
+          Gửi OTP
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminAddCategory = () => {
   const [message, setMessage] = useState("");
@@ -27,7 +29,10 @@ const AdminAddCategory = () => {
       setCategory({ name: "" });
 
       // Hiển thị thông báo thành công
-      setMessage(`Thêm danh mục "${category.name}" thành công!`);
+      toast.success(`Thêm danh mục thành công !`, {
+        position: "top-right",
+        autoClose: 3000, // Tự động đóng sau 3 giây
+      });
     } catch (error) {
       // Bắt lỗi và hiển thị thông báo lỗi từ server
       if (error.response && error.response.data) {
@@ -42,6 +47,7 @@ const AdminAddCategory = () => {
   return (
     <Container className="mt-4">
       <h2>Thêm danh mục</h2>
+      <ToastContainer />
       <Form>
         <Form.Group controlId="categoryName">
           <Form.Label>Tên danh mục:</Form.Label>

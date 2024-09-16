@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeContext } from "./ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyPosts = () => {
   const [myPost, setMyPost] = useState([]);
@@ -36,6 +38,15 @@ const MyPosts = () => {
         .then((response) => {
           console.log("Delete post success");
           // Xóa bài viết khỏi state sau khi xóa thành công
+          // Hiển thị thông báo thành công
+          toast.success(`Thêm danh mục thành công !`, {
+            position: "top-right",
+            autoClose: 3000, // Tự động đóng sau 3 giây
+          });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
           setMyPost((prevPosts) =>
             prevPosts.filter((post) => post.id !== postId)
           );
@@ -50,6 +61,7 @@ const MyPosts = () => {
 
   return (
     <div className={context.theme}>
+      <ToastContainer />
       <div className="container">
         <h2 className="mb-4">Bài viết của tôi</h2>
         <table className="table table-bordered table-hover">

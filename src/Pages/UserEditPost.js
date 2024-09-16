@@ -3,6 +3,8 @@ import axios from "axios";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserEditPost = () => {
   const { id } = useParams(); // Lấy id từ tham số URL
@@ -67,6 +69,16 @@ const UserEditPost = () => {
       .then((response) => {
         console.log("Post updated successfully");
         console.log("Form date : " + formData);
+
+        // Hiển thị thông báo thành công
+        toast.success(`Chỉnh bài viết thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((error) => {
         console.log("Error updating post", error.response.data);
@@ -90,6 +102,7 @@ const UserEditPost = () => {
 
   return (
     <div className={context.theme}>
+      <ToastContainer />
       <Container>
         <Row className="justify-content-center">
           <Col md={8}>

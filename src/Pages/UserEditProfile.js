@@ -4,6 +4,8 @@ import { Form, Button, Container } from "react-bootstrap";
 import { ThemeContext } from "./ThemeContext";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserEditProfile = () => {
   const { id } = useParams();
@@ -49,19 +51,23 @@ const UserEditProfile = () => {
     }
 
     axios
-      .put(
-        `http://localhost:8080/api/auth/users/${id}`,
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      .put(`http://localhost:8080/api/auth/users/${id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        { withCredentials: true }
-      )
+      })
       .then((response) => {
         console.log("User updated successfully");
         // Có thể cập nhật state hoặc chuyển hướng mà không cần reload trang
+        // Hiển thị thông báo thành công
+        toast.success(`Chỉnh thông tin thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error updating user!", error);
@@ -75,6 +81,7 @@ const UserEditProfile = () => {
   const context = useContext(ThemeContext);
   return (
     <div className={context.theme}>
+      <ToastContainer />
       <Container className="profile-form-container">
         <h2 className="text-center mb-4">Chỉnh sửa hồ sơ</h2>
         <Form onSubmit={handleSubmit}>

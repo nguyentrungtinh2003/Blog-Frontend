@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminEditCategory = () => {
   const { id } = useParams();
@@ -35,6 +37,11 @@ const AdminEditCategory = () => {
       }) // Thay POST bằng PUT cho cập nhật
       .then((response) => {
         console.log("Category updated successfully!");
+        // Hiển thị thông báo thành công
+        toast.success(`Chỉnh danh mục thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
       })
       .catch((error) => {
         console.error("Error updating category!", error);
@@ -44,6 +51,7 @@ const AdminEditCategory = () => {
   return (
     <Container className="mt-4">
       <h2>Chỉnh sửa danh mục</h2>
+      <ToastContainer />
       <Form>
         <Form.Group controlId="categoryName">
           <Form.Label>Tên danh mục:</Form.Label>

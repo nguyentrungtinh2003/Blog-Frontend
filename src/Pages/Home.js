@@ -10,7 +10,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.6:8080/api/posts/newPost", {
+      .get("http://localhost:8080/api/posts/newPost", {
         withCredentials: true,
       })
       .then((response) => {

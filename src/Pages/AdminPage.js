@@ -19,6 +19,13 @@ const AdminPage = () => {
   const [category, setCategory] = useState([]);
   const [comments, setComments] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null); // State to track selected card
+  //Phan trang
+  const [currentPage, setCurrentPage] = useState(1); // Current page
+  const [postsPerPage] = useState(4); // Posts per page (you can change this value)
+  const [usersPerPage] = useState(4); // Posts per page (you can change this value)
+  const [commentsPerPage] = useState(4); // Posts per page (you can change this value)
+  const [categorysPerPage] = useState(4); // Posts per page (you can change this value)
+  //
 
   // Function to fetch users
   const fetchUsers = () => {
@@ -34,6 +41,13 @@ const AdminPage = () => {
       });
   };
 
+  // Calculate indexes of the first and last post on the current page
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+
+  // Get the current posts for the current page
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
   // Function to fetch posts
   const fetchPosts = () => {
     axios
@@ -47,6 +61,16 @@ const AdminPage = () => {
         console.error("Error fetching posts:", error);
       });
   };
+
+  // Calculate indexes of the first and last post on the current page
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+
+  // Get the current posts for the current page
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Function to change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Function to fetch likes
   const fetchCategory = () => {
@@ -62,6 +86,16 @@ const AdminPage = () => {
       });
   };
 
+  // Calculate indexes of the first and last post on the current page
+  const indexOfLastCategory = currentPage * categorysPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categorysPerPage;
+
+  // Get the current posts for the current page
+  const currentCategorys = category.slice(
+    indexOfFirstCategory,
+    indexOfLastUser
+  );
+
   // Function to fetch users
   const fetchComments = () => {
     axios
@@ -75,6 +109,16 @@ const AdminPage = () => {
         console.error("Error fetching comment:", error);
       });
   };
+
+  // Calculate indexes of the first and last post on the current page
+  const indexOfLastComment = currentPage * commentsPerPage;
+  const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+
+  // Get the current posts for the current page
+  const currentComments = comments.slice(
+    indexOfFirstComment,
+    indexOfLastComment
+  );
 
   useEffect(() => {
     // Fetch initial data
@@ -247,6 +291,147 @@ const AdminPage = () => {
       });
   };
 
+  // Pagination Component
+  const PaginationPost = ({
+    postsPerPage,
+    totalPosts,
+    paginate,
+    currentPage,
+  }) => {
+    const pageNumbers = [];
+
+    // Calculate total number of pages
+    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="pagination">
+          {pageNumbers.map((number) => (
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? "active" : ""}`}
+            >
+              <a
+                onClick={() => paginate(number)}
+                href="#!"
+                className="page-link"
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
+  const PaginationUser = ({
+    usersPerPage,
+    totalUsers,
+    paginate,
+    currentPage,
+  }) => {
+    const pageNumbers = [];
+
+    // Calculate total number of pages
+    for (let i = 1; i <= Math.ceil(totalUsers / usersPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="pagination">
+          {pageNumbers.map((number) => (
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? "active" : ""}`}
+            >
+              <a
+                onClick={() => paginate(number)}
+                href="#!"
+                className="page-link"
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
+  const PaginationCategory = ({
+    categorysPerPage,
+    totalCategorys,
+    paginate,
+    currentPage,
+  }) => {
+    const pageNumbers = [];
+
+    // Calculate total number of pages
+    for (let i = 1; i <= Math.ceil(totalCategorys / categorysPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="pagination">
+          {pageNumbers.map((number) => (
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? "active" : ""}`}
+            >
+              <a
+                onClick={() => paginate(number)}
+                href="#!"
+                className="page-link"
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
+  const PaginationComment = ({
+    commentsPerPage,
+    totalComments,
+    paginate,
+    currentPage,
+  }) => {
+    const pageNumbers = [];
+
+    // Calculate total number of pages
+    for (let i = 1; i <= Math.ceil(totalComments / commentsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <nav>
+        <ul className="pagination">
+          {pageNumbers.map((number) => (
+            <li
+              key={number}
+              className={`page-item ${currentPage === number ? "active" : ""}`}
+            >
+              <a
+                onClick={() => paginate(number)}
+                href="#!"
+                className="page-link"
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
+
   const context = useContext(ThemeContext);
   return (
     <div className={`${context.theme}`}>
@@ -383,7 +568,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user, index) => (
+                {currentUsers.map((user, index) => (
                   <tr key={user.id}>
                     <td>{index + 1}</td>
                     <td>{user.username}</td>
@@ -454,6 +639,13 @@ const AdminPage = () => {
                 ))}
               </tbody>
             </Table>
+            {/* Pagination controls */}
+            <PaginationUser
+              usersPerPage={usersPerPage}
+              totalUsers={users.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </div>
         )}
 
@@ -478,7 +670,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {posts.map((post, index) => (
+                {currentPosts.map((post, index) => (
                   <tr key={post.id}>
                     <td className="text-center">{index + 1}</td>
                     <td>{post.name}</td>
@@ -515,6 +707,13 @@ const AdminPage = () => {
                 ))}
               </tbody>
             </Table>
+            {/* Pagination controls */}
+            <PaginationPost
+              postsPerPage={postsPerPage}
+              totalPosts={posts.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </div>
         )}
 
@@ -540,7 +739,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {category.map((cate, index) => (
+                {currentCategorys.map((cate, index) => (
                   <tr key={cate.id}>
                     <td>{index + 1}</td>
                     <td>{cate.name}</td>
@@ -587,6 +786,13 @@ const AdminPage = () => {
                 ))}
               </tbody>
             </Table>
+            {/* Pagination controls */}
+            <PaginationCategory
+              categorysPerPage={categorysPerPage}
+              totalCategorys={category.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </div>
         )}
 
@@ -611,7 +817,7 @@ const AdminPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {comments.map((comment, index) => (
+                {currentComments.map((comment, index) => (
                   <tr key={comment.id}>
                     <td>{index + 1}</td>
                     <td>{comment.content}</td>
@@ -651,6 +857,12 @@ const AdminPage = () => {
                 ))}
               </tbody>
             </Table>
+            <PaginationComment
+              commentsPerPage={commentsPerPage}
+              totalComments={comments.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </div>
         )}
       </Container>

@@ -222,7 +222,7 @@ const UserPage = () => {
 
         // Hiển thị thông báo thành công
         toast.success(`Thêm bài viết ${name} thành công !`, {
-          position: toast.POSITION.TOP_RIGHT,
+          position: "top-right",
           autoClose: 3000, // Tự động đóng sau 3 giây
         });
       })

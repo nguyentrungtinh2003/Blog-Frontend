@@ -1,1 +1,41 @@
+name: Deploy React App to Vercel
 
+on:
+  push:
+    branches:
+      - main  # Thay 'main' bằng nhánh bạn muốn deploy, nếu cần
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout mã nguồn của dự án
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Cài đặt Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Bạn có thể thay đổi phiên bản Node.js theo nhu cầu
+
+      # Cài đặt các dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build ứng dụng React
+      - name: Build app
+        run: npm run build
+
+      # Deploy ứng dụng lên Vercel
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}  # Nếu cần, bỏ qua nếu không cần
+          vercel-project-name: ${{ secrets.VERCEL_PROJECT_NAME }}  # Nếu cần, bỏ qua nếu không cần
+          vercel-args: '--prod'  # Để deploy lên môi trường production

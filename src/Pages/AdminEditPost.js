@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const AdminEditPost = () => {
   const { id } = useParams(); // Lấy id từ tham số URL
@@ -22,7 +23,7 @@ const AdminEditPost = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/posts/${id}`)
+      .get(`${URL}/api/posts/${id}`)
       .then((response) => {
         setPost(response.data);
       })
@@ -62,7 +63,7 @@ const AdminEditPost = () => {
     }
     formData.append("category", category);
     axios
-      .put(`http://localhost:8080/api/posts/${id}`, formData, {
+      .put(`${URL}/api/posts/${id}`, formData, {
         withCredentials: true,
       })
       .then((response) => {
@@ -82,7 +83,7 @@ const AdminEditPost = () => {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/api/categories`, { withCredentials: true })
+        .get(`${URL}/api/categories`, { withCredentials: true })
         .then((response) => [setCategories(response.data)]);
     } catch (error) {
       console.error("Error get all categories !", error);

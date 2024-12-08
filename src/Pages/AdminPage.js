@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import { ThemeContext } from "./ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const AdminPage = () => {
   const [userCount, setUserCount] = useState(0);
@@ -30,7 +31,7 @@ const AdminPage = () => {
   // Function to fetch users
   const fetchUsers = () => {
     axios
-      .get("http://localhost:8080/api/auth/users")
+      .get(`${URL}/api/auth/users`)
       .then((response) => {
         setUsers(response.data);
         setUserCount(response.data.length); // Update userCount state
@@ -51,7 +52,7 @@ const AdminPage = () => {
   // Function to fetch posts
   const fetchPosts = () => {
     axios
-      .get("http://localhost:8080/api/posts")
+      .get(`${URL}/api/posts`)
       .then((response) => {
         setPosts(response.data);
         setPostCount(response.data.length); // Update postCount state
@@ -75,7 +76,7 @@ const AdminPage = () => {
   // Function to fetch likes
   const fetchCategory = () => {
     axios
-      .get("http://localhost:8080/api/categories")
+      .get(`${URL}/api/categories`)
       .then((response) => {
         setCategory(response.data);
         setCategoryCount(response.data.length); // Update postCount state
@@ -99,7 +100,7 @@ const AdminPage = () => {
   // Function to fetch users
   const fetchComments = () => {
     axios
-      .get("http://localhost:8080/api/comments")
+      .get(`${URL}/api/comments`)
       .then((response) => {
         setComments(response.data);
         setCommentCount(response.data.length); // Update userCount state
@@ -152,7 +153,7 @@ const AdminPage = () => {
 
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/categories/${id}`)
+        .delete(`${URL}/api/categories/${id}`)
         .then((response) => {
           console.log("Delete category success");
           // Hiển thị thông báo thành công
@@ -178,7 +179,7 @@ const AdminPage = () => {
 
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/posts/${id}`)
+        .delete(`${URL}/api/posts/${id}`)
         .then((response) => {
           console.log("Delete post success");
           // Hiển thị thông báo thành công
@@ -204,7 +205,7 @@ const AdminPage = () => {
 
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/comments/${id}`)
+        .delete(`${URL}/api/comments/${id}`)
         .then((response) => {
           console.log("Delete comment success !");
           // Hiển thị thông báo thành công
@@ -258,7 +259,7 @@ const AdminPage = () => {
   // active user
   const activateUser = async (userId, enable) => {
     try {
-      await axios.put(`http://localhost:8080/api/auth/${userId}/enable`, null, {
+      await axios.put(`${URL}/api/auth/${userId}/enable`, null, {
         params: {
           enable: enable,
         },
@@ -271,20 +272,37 @@ const AdminPage = () => {
 
   // Ví dụ sử dụng hàm activateUser trong một component
   const handleActivateUser = (id) => {
-    activateUser(id, true);
+    activateUser(id, true).then(() => {
+      // Hiển thị thông báo thành công
+      toast.success(`Mở khoá tài khoản thành công !`, {
+        position: "top-right",
+        autoClose: 3000, // Tự động đóng sau 3 giây
+      });
+    });
   };
 
   const handleKickUser = (id) => {
-    activateUser(id, false);
+    activateUser(id, false).then(() => {
+      // Hiển thị thông báo thành công
+      toast.success(`Khoá tài khoản thành công !`, {
+        position: "top-right",
+        autoClose: 3000, // Tự động đóng sau 3 giây
+      });
+    });
   };
 
   //
 
   const handelSendEmailWarning = (email) => {
     axios
-      .post(`http://localhost:8080/api/email/sendWarning`, { email: email })
+      .post(`${URL}/api/email/sendWarning`, { email: email })
       .then((response) => {
         console.log(`Send email warning with email : ${email} success !`);
+        // Hiển thị thông báo thành công
+        toast.success(`Gửi cảnh báo đến ${email} thành công !`, {
+          position: "top-right",
+          autoClose: 3000, // Tự động đóng sau 3 giây
+        });
       })
       .catch((error) => {
         console.log(`Fail send email with email : ${email} !`);

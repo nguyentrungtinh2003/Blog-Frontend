@@ -6,6 +6,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const UserEditProfile = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const UserEditProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${id}`, {
+      .get(`${URL}/api/auth/users/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -51,7 +52,7 @@ const UserEditProfile = () => {
     }
 
     axios
-      .put(`http://localhost:8080/api/auth/users/${id}`, data, {
+      .put(`${URL}/api/auth/users/${id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

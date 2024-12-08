@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { ThemeContext } from "../ThemeContext";
+import URL from "../URL";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -17,11 +18,14 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        { username, password },
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${URL}/api/auth/login`, {
+        username,
+        password,
+      });
+      console.log("response", response);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userID", response.data.id);
+      console.log("id : ", localStorage.getItem("userID"));
       const { username: loggedInUser, id: loggedInUserId, img } = response.data;
       if (loggedInUser) {
         setMessage(`User: ${loggedInUser} logged in successfully!`);
@@ -30,7 +34,7 @@ const Login = () => {
       }
       setError(false);
       setUser(loggedInUser);
-      setUserId(loggedInUserId);
+      setUserId(localStorage.getItem("userID"));
       setUserImg(img);
       if (username === "admin") {
         navigate("/admin");
@@ -90,9 +94,15 @@ const Login = () => {
                 ></i>
               </Button>
 
-              <Button variant="primary" type="submit" className="mt-2">
+              <Button variant="primary" type="submit" className="m-2">
                 Đăng nhập
               </Button>
+              <a href="/forgot-password">
+                <Button variant="primary" className="m-2">
+                  Quên mật khẩu
+                </Button>
+              </a>
+
               <div className="mt-2">
                 <Link to="/register">
                   <Button variant="secondary">Đăng ký</Button>

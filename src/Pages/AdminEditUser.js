@@ -5,6 +5,7 @@ import { Form, Button, Container } from "react-bootstrap";
 import { ThemeContext } from "./ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const AdminEditUser = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const AdminEditUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${id}`, {
+      .get(`${URL}/api/auth/users/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -50,7 +51,7 @@ const AdminEditUser = () => {
     }
     axios
       .put(
-        `http://localhost:8080/api/auth/users/${id}`,
+        `${URL}/api/auth/users/${id}`,
         data,
         {
           headers: {

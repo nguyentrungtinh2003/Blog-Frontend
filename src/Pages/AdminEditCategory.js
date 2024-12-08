@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const AdminEditCategory = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const AdminEditCategory = () => {
   useEffect(() => {
     // Lấy danh mục theo ID khi component được mount
     axios
-      .get(`http://localhost:8080/api/categories/${id}`)
+      .get(`${URL}/api/categories/${id}`)
       .then((response) => {
         console.log("Get category by ID success!");
         setCategory(response.data); // Cập nhật trạng thái với dữ liệu danh mục
@@ -32,7 +33,7 @@ const AdminEditCategory = () => {
 
   const handleEditCategory = () => {
     axios
-      .put(`http://localhost:8080/api/categories/${id}`, category, {
+      .put(`${URL}/api/categories/${id}`, category, {
         withCredentials: true,
       }) // Thay POST bằng PUT cho cập nhật
       .then((response) => {

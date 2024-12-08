@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ThemeContext, ThemeProvider } from "./ThemeContext";
+import URL from "./URL";
 
 const Home = () => {
   const [newPost, setNewPost] = useState([]);
@@ -10,7 +11,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/posts/newPost", {
+      .get(`${URL}/api/posts/newPost`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -23,7 +24,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/posts", { withCredentials: true })
+      .get(`${URL}/api/posts`, { withCredentials: true })
       .then((response) => {
         setPosts(response.data);
       })

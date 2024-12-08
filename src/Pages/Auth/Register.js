@@ -3,6 +3,7 @@ import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../ThemeContext";
+import URL from "../URL";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -32,7 +33,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
+        `${URL}/api/auth/register`,
         formData,
         {
           headers: {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Form, Button, Card, Row, Col } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
-
+import URL from "./URL";
 const UserEditComment = () => {
   const { id } = useParams(); // Get the id from the URL parameters
   const navigate = useNavigate(); // For navigation after form submission
@@ -15,7 +15,7 @@ const UserEditComment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/comments/${id}`, {
+      .get(`${URL}/api/comments/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -35,7 +35,7 @@ const UserEditComment = () => {
     e.preventDefault();
 
     axios
-      .put(`http://localhost:8080/api/comments/${id}`, comment, {
+      .put(`${URL}/api/comments/${id}`, comment, {
         withCredentials: true,
       })
       .then((response) => {

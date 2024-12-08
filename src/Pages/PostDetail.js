@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import URL from "./URL";
 
 const PostDetail = () => {
   const { id } = useParams(); // Lấy id từ tham số URL
@@ -24,7 +25,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/posts/${id}`)
+      .get(`${URL}/api/posts/${id}`)
       .then((response) => {
         setPostDetail(response.data);
       })
@@ -35,7 +36,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/comments/post/${id}`)
+      .get(`${URL}/api/comments/post/${id}`)
       .then((response) => {
         setComments(response.data);
       })
@@ -49,7 +50,7 @@ const PostDetail = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8080/api/comments", {
+      const response = await axios.post(`${URL}/api/comments`, {
         content: newComment,
         post: { id: postDetail.id },
         postedBy: { id: userId },

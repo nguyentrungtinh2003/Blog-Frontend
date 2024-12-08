@@ -40,6 +40,12 @@ const Header = () => {
           {user ? (
             <>
               <div className="d-flex justify-content-center align-items-center">
+                <Nav.Link
+                  href="/chat"
+                  className="text-dark ms-2" // Thay đổi màu chữ thành đen
+                >
+                  <i className="fas fa-comment"></i>
+                </Nav.Link>
                 <img
                   src={`http://localhost:8080/uploads/${userImg}`}
                   alt="User Avatar"

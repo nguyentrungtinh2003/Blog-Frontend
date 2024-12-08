@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const AdminAddCategory = () => {
   const [message, setMessage] = useState("");
@@ -20,7 +21,7 @@ const AdminAddCategory = () => {
     try {
       // Gọi API POST để thêm danh mục mới
       const response = await axios.post(
-        "http://localhost:8080/api/categories/create",
+        `${URL}/api/categories/create`,
         category
       );
       console.log("Add category success!", response.data);

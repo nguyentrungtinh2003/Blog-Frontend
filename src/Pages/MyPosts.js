@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeContext } from "./ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const MyPosts = () => {
   const [myPost, setMyPost] = useState([]);
@@ -13,7 +14,7 @@ const MyPosts = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/posts/byUser/${id}`, {
+      .get(`${URL}/api/posts/byUser/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -32,7 +33,7 @@ const MyPosts = () => {
     );
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/posts/${postId}`, {
+        .delete(`${URL}/api/posts/${postId}`, {
           withCredentials: true,
         })
         .then((response) => {

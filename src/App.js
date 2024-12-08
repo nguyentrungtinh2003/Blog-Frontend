@@ -27,6 +27,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./Pages/Auth/ForgotPassword";
 import ResetPassword from "./Pages/Auth/ResetPassword ";
+import ChatRoom from "./Pages/ChatRoom";
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/user" element={<UserPage />} />
+          <Route path="/chat" element={<ChatRoom />} />
           <Route path="/view/:id" element={<PostDetail />} />
           <Route path="/viewUser/:id" element={<ViewUser />} />
           <Route path="/editUser/:id" element={<AdminEditUser />} />

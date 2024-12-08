@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import URL from "./URL";
 
 const PostManager = () => {
   const [content, setContent] = useState("");
@@ -11,7 +12,7 @@ const PostManager = () => {
 
   const fetchPosts = () => {
     axios
-      .get("http://localhost:8080/posts", { withCredentials: true })
+      .get(`${URL}/posts`, { withCredentials: true })
       .then((response) => {
         setPosts(response.data);
       })
@@ -25,11 +26,7 @@ const PostManager = () => {
 
     // Send the content to the backend
     axios
-      .post(
-        "http://localhost:8080/posts",
-        { content },
-        { withCredentials: true }
-      )
+      .post(`${URL}/posts`, { content }, { withCredentials: true })
       .then((response) => {
         alert("Post added successfully");
         fetchPosts(); // Refresh posts after adding

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -23,23 +24,34 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <h2>Quên mật khẩu</h2>
+    <Row className="justify-content-md-center">
+      <Col md={6}>
+        <h2 className="text-center mb-4">Quên mật khẩu</h2>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email của bạn</Form.Label>
+            <Form.Control
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Nhập email của bạn"
+              required
+            />
+          </Form.Group>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Nhập email của bạn"
-          required
-        />
-        <button type="submit" className="btn btn-primary">
-          Gửi OTP
-        </button>
-      </form>
-      {message && <p>{message}</p>}
-    </div>
+          <Button variant="primary" type="submit" className=" mt-3">
+            OTP
+          </Button>
+        </Form>
+
+        {/* Hiển thị thông báo nếu có */}
+        {message && (
+          <Alert variant="success" className="mt-3 text-center">
+            {message}
+          </Alert>
+        )}
+      </Col>
+    </Row>
   );
 };
 

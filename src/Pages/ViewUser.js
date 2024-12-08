@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
 import { Container, Row, Col, Card } from "react-bootstrap";
+import URL from "./URL";
 
 const ViewUser = () => {
   const [user, setUser] = useState({});
@@ -11,7 +12,7 @@ const ViewUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${id}`, {
+      .get(`${URL}/api/auth/users/${id}`, {
         withCredentials: true,
       })
       .then((response) => setUser(response.data))

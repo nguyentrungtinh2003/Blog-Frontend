@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeContext } from "./ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import URL from "./URL";
 
 const MyComment = () => {
   const [myComment, setMyComment] = useState([]);
@@ -13,7 +14,7 @@ const MyComment = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/comments/byUser/${id}`, {
+      .get(`${URL}/api/comments/byUser/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
@@ -33,7 +34,7 @@ const MyComment = () => {
 
     if (userConfirm) {
       axios
-        .delete(`http://localhost:8080/api/comments/${id}`, {
+        .delete(`${URL}/api/comments/${id}`, {
           withCredentials: true,
         })
         .then((response) => {

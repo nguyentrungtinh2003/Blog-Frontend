@@ -7,6 +7,7 @@ import { Dropdown, Badge } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ConfigToken from "./Auth/ConfigToken";
 import {
   Container,
   Row,
@@ -29,6 +30,8 @@ import {
 } from "react-icons/fa";
 import { UserContext } from "./UserContext";
 import { FaUsersViewfinder } from "react-icons/fa6";
+import { MdToken } from "react-icons/md";
+import URL from "./URL";
 
 const UserPage = () => {
   const { loggedInUserId } = useContext(UserContext);
@@ -73,13 +76,13 @@ const UserPage = () => {
   useEffect(() => {
     if (searchTerm == "") {
       axios
-        .get("http://localhost:8080/api/posts")
+        .get(`${URL}/api/posts`, ConfigToken)
         .then((response) => {
           setPosts(response.data);
           const initialComments = {};
           response.data.forEach((post) => {
             axios
-              .get(`http://localhost:8080/api/comments/${post.id}`, {
+              .get(`${URL}/api/comments/${post.id}`, {
                 withCredentials: true,
               })
               .then((commentResponse) => {
@@ -102,7 +105,7 @@ const UserPage = () => {
 
   const fetchUserDetails = () => {
     axios
-      .get(`http://localhost:8080/api/auth/users/${loggedInUserId}`)
+      .get(`${URL}/api/auth/users/${loggedInUserId}`)
       .then((response) => {
         setUserDetails(response.data);
       })
@@ -119,7 +122,7 @@ const UserPage = () => {
       password,
     };
     axios
-      .put(`http://localhost:8080/api/auth/users/${id}`, updatedUser)
+      .put(`${URL}/api/auth/users/${id}`, updatedUser)
       .then((response) => {
         setUserDetails(response.data);
         setShowProfileModal(false);
@@ -131,7 +134,7 @@ const UserPage = () => {
 
   const handleLike = (postId) => {
     axios
-      .put(`http://localhost:8080/api/posts/${postId}/like`)
+      .put(`${URL}/api/posts/${postId}/like`, ConfigToken)
       .then((response) => {
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
@@ -149,7 +152,7 @@ const UserPage = () => {
 
   const handleUnlike = (postId) => {
     axios
-      .put(`http://localhost:8080/api/posts/${postId}/Unlike`)
+      .put(`${URL}/api/posts/${postId}/Unlike`, ConfigToken)
       .then((response) => {
         setPosts((prevPosts) =>
           prevPosts.map((post) =>
@@ -202,11 +205,11 @@ const UserPage = () => {
     ); // convert array to comma-separated string
     formData.append("postedBy", userId);
     formData.append("category", category);
-    formData.append("notificationType", notificationType);
-    formData.append("recipientEmail", recipientEmail);
+    // formData.append("notificationType", notificationType);
+    // formData.append("recipientEmail", recipientEmail);
 
     axios
-      .post("http://localhost:8080/api/posts", formData, {
+      .post(`${URL}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -239,7 +242,7 @@ const UserPage = () => {
     };
 
     axios
-      .post("http://localhost:8080/api/comments/create", commentData)
+      .post(`${URL}/api/comments/create`, commentData)
       .then((response) => {
         updateComments(postId, response.data);
         setCommentContent("");
@@ -254,7 +257,8 @@ const UserPage = () => {
     if (searchTerm) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/posts/search/${searchTerm}`
+          `${URL}/api/posts/search/${searchTerm}`,
+          ConfigToken
         );
         setPosts(response.data);
       } catch (error) {
@@ -299,7 +303,7 @@ const UserPage = () => {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:8080/api/categories`)
+        .get(`${URL}/api/categories`, ConfigToken)
         .then((response) => [setCategories(response.data)]);
     } catch (error) {
       console.error("Error get all categories !", error);
@@ -310,7 +314,7 @@ const UserPage = () => {
   useEffect(() => {
     // Lấy thông báo từ API
     axios
-      .get(`http://localhost:8080/api/notifications/${userId}`)
+      .get(`${URL}/api/notifications/${userId}`, ConfigToken)
       .then((response) => {
         setNotification(response.data);
       })
@@ -321,7 +325,7 @@ const UserPage = () => {
 
   const markAsRead = (id) => {
     axios
-      .post(`http://localhost:8080/api/notifications/${id}/mark-read`)
+      .post(`${URL}/api/notifications/${id}/mark-read`, ConfigToken)
       .then(() => {
         // Cập nhật trạng thái thông báo sau khi đánh dấu là đã đọc
         setNotification(
@@ -338,7 +342,7 @@ const UserPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/categories`)
+      .get(`${URL}/api/categories`, ConfigToken)
       .then((response) => {
         setFindCategory(response.data);
         console.log(response.data);
@@ -350,7 +354,7 @@ const UserPage = () => {
 
   const onCategorySelect = (id) => {
     axios
-      .get(`http://localhost:8080/api/categories/${id}`)
+      .get(`${URL}/api/categories/${id}`, ConfigToken)
       .then((response) => {
         setPosts(response.data.posts);
         setActiveCategory(id);
@@ -365,14 +369,15 @@ const UserPage = () => {
     e.preventDefault();
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/posts/search",
+        `${URL}/api/posts/search`,
         {
           params: {
             author,
             title,
             content,
           },
-        }
+        },
+        ConfigToken
       );
       // Hiển thị thông báo thành công
       toast.success("Thành công !", {
@@ -736,7 +741,7 @@ const UserPage = () => {
                         ))}
                       </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="formToEmail">
+                    {/* <Form.Group controlId="formToEmail">
                       <Form.Label>Thông báo đến</Form.Label>
                       <Form.Control
                         type="text"
@@ -744,8 +749,8 @@ const UserPage = () => {
                         value={recipientEmail}
                         onChange={(e) => setRecipientEmail(e.target.value)}
                       />
-                    </Form.Group>
-                    <Form.Group controlId="formSend">
+                    </Form.Group> */}
+                    {/* <Form.Group controlId="formSend">
                       <Form.Label>Gửi thông báo qua</Form.Label>
                       <Form.Control
                         type="text"
@@ -753,7 +758,7 @@ const UserPage = () => {
                         value={notificationType}
                         onChange={(e) => setNotificationType(e.target.value)}
                       />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Button variant="primary" type="submit" className="mt-2">
                       <li className="fas fa-check"></li>
                     </Button>
